@@ -1,31 +1,45 @@
+<?php require 'config.php'; ?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html data-theme="light" lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Login Page</title>
 </head>
 
 <body>
-    <h1>Welcome Back!</h1>
-    <form action="/login" method="post">
-        <div class="center">
-            <img src="images/user.svg" alt="user icon">
-            <input type="text" id="username" name="username" placeholder="Username"><br>
-        </div>
-
-        <div class="center">
-            <img src="images/lock.svg" alt="lock icon">
-            <input type="password" id="password" name="password" placeholder="Password"><br>
-        </div>
-
-        <div class="center">
-            <input type="submit" value="Login">
-        </div>
-    </form>
-</body>
+    <nav class="container-fluid">
+        <ul>
+            <li><a href="./" class="contrast"><strong>Good Travels</strong></a></li>
+        </ul>
+    </nav>
+    <main class="container">
+        <article class="grid">
+            <div>
+                <hgroup>
+                    <h1>Welcome Back!</h1>
+                    <p>Use your credentials to sign in.</p>
+                </hgroup>
+                <form>
+                    <input type="text" name="login" placeholder="Login" aria-label="Login" autocomplete="nickname" required>
+                    <input type="password" name="password" placeholder="Password" aria-label="Password" autocomplete="current-password" required>
+                    <fieldset>
+                        <label for="remember">
+                            <input type="checkbox" role="switch" id="remember" name="remember">
+                            Remember me
+                        </label>
+                    </fieldset>
+                    <button type="submit" class="contrast" onclick="event.preventDefault()">Login</button>
+                </form>
+            </div>
+            <div></div>
+        </article>
+    </main>
 
 </html>
