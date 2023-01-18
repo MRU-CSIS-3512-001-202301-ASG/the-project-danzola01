@@ -12,3 +12,5 @@
 - Created the SQL instance on GCP
 - Created a bucket to hold the `travel-db-dump.sql` file and imported to db
 - Created config.php to connect to db
+- Looked into CSS frameworks as I had never used one before
+- Tailwind CSS and Pico CSS look neat, I will stick with Pico for now
