@@ -1,5 +1,3 @@
-<?php require 'config.php'; ?>
-
 <!DOCTYPE html>
 <html data-theme="light" lang="en">
 
@@ -27,7 +25,7 @@
                     <p>Use your credentials to sign in.</p>
                 </hgroup>
                 <form>
-                    <input type="text" name="login" placeholder="Login" aria-label="Login" autocomplete="nickname" required>
+                    <input type="text" name="Username" placeholder="Usernmae" aria-label="Login" autocomplete="nickname" required>
                     <input type="password" name="password" placeholder="Password" aria-label="Password" autocomplete="current-password" required>
                     <fieldset>
                         <label for="remember">
