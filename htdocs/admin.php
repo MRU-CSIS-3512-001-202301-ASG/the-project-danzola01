@@ -24,17 +24,20 @@
                     <h1>Welcome Back!</h1>
                     <p>Use your credentials to sign in.</p>
                 </hgroup>
-                <form>
-                    <input type="text" name="Username" placeholder="Usernmae" aria-label="Login" autocomplete="nickname" required>
-                    <input type="password" name="password" placeholder="Password" aria-label="Password" autocomplete="current-password" required>
+                <form action="validate_admin.php" method="post">
+                    <input type="text" name="Username" placeholder="Username" aria-label="Login" autocomplete="nickname"
+                        required>
+                    <input type="password" name="password" placeholder="Password" aria-label="Password"
+                        autocomplete="current-password" required>
                     <fieldset>
                         <label for="remember">
                             <input type="checkbox" role="switch" id="remember" name="remember">
                             Remember me
                         </label>
                     </fieldset>
-                    <button type="submit" class="contrast" onclick="event.preventDefault()">Login</button>
+                    <button type="submit" name="submit" class="contrast">Login</button>
                 </form>
+                <button class="secondary" onclick="window.location.href='register.php'">Register</button>
             </div>
             <div></div>
         </article>
