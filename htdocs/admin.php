@@ -12,11 +12,7 @@
 </head>
 
 <body>
-    <nav class="container-fluid">
-        <ul>
-            <li><a href="./" class="contrast"><strong>Good Travels</strong></a></li>
-        </ul>
-    </nav>
+    <? include 'header.php'; ?>
     <main class="container">
         <article class="grid">
             <div>
