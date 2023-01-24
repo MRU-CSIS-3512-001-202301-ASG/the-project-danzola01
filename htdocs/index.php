@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <?php require "navigation.php" ?>
+    <? include 'navigation.php'; ?>
     <h1>My Travel Blog</h1>
 </body>
 

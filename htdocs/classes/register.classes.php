@@ -6,7 +6,6 @@ class Register extends Dbh
     // Create user
     public function createUser($FirstName, $LastName, $Address, $City, $Region, $Country, $Postal, $Phone, $Email, $Password)
     {
-        header($FirstName . $LastName . $Address . $City . $Region . $Country . $Postal . $Phone . $Email . $Password);
         $stmt = $this->connect()->prepare("INSERT INTO users (FirstName, LastName, Address, City, Region, Country, Postal, Phone, Email, Password) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         $hashedPwd = password_hash($Password, PASSWORD_DEFAULT);

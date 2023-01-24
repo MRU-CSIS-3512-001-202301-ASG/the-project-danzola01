@@ -12,7 +12,7 @@
 </head>
 
 <body>
-    <? include 'header.php'; ?>
+    <? include 'navigation.php'; ?>
     <main class="container">
         <article class="grid">
             <div>
@@ -20,7 +20,7 @@
                     <h1>Welcome Back!</h1>
                     <p>Use your credentials to sign in.</p>
                 </hgroup>
-                <form action="validate_admin.php" method="post">
+                <form action="./includes/login.inc.php" method="post">
                     <input type="text" name="Username" placeholder="Username" aria-label="Login" autocomplete="nickname"
                         required>
                     <input type="password" name="password" placeholder="Password" aria-label="Password"
