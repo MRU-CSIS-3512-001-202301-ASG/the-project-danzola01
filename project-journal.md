@@ -16,4 +16,4 @@
 - Tailwind CSS and Pico CSS look neat, I will stick with Pico for now
 - Created the resgistration and login pages
 - Made the required logic to have a user be able to register through the registration page (A lot more difficult than I thought it would be)
--
+- I found a very useful tutorial [tutorial](https://youtu.be/BaEm2Qv14oU).
