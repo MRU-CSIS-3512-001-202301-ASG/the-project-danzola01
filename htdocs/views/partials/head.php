@@ -14,7 +14,7 @@
     <?php endforeach; ?>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
 
     <!-- Page title -->
     <title><?= $page_title ?></title>
