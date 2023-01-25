@@ -1,42 +1,54 @@
-<!DOCTYPE html>
-<html data-theme="light" lang="en">
+<?php
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
-    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
-    <link rel="stylesheet" href="css/style.css">
-    <title>Login Page</title>
-</head>
+session_start();
 
-<body>
-    <? include 'navigation.php'; ?>
-    <main class="container">
-        <article class="grid">
-            <div>
-                <hgroup>
-                    <h1>Welcome Back!</h1>
-                    <p>Use your credentials to sign in.</p>
-                </hgroup>
-                <form action="./includes/login.inc.php" method="post">
-                    <input type="text" name="Username" placeholder="Username" aria-label="Login" autocomplete="nickname"
-                        required>
-                    <input type="password" name="password" placeholder="Password" aria-label="Password"
-                        autocomplete="current-password" required>
-                    <fieldset>
-                        <label for="remember">
-                            <input type="checkbox" role="switch" id="remember" name="remember">
-                            Remember me
-                        </label>
-                    </fieldset>
-                    <button type="submit" name="submit" class="contrast">Login</button>
-                </form>
-                <button class="secondary" onclick="window.location.href='register.php'">Register</button>
-            </div>
-            <div></div>
-        </article>
-    </main>
+$stylesheets = [
+    // "style.css"
+];
 
-</html>
+$page_title = "Login Page";
+
+$invalid_username = "";
+$invalid_password = "";
+
+$errors = [];
+
+// Arriving here via GET -> display the form
+if ($_SERVER['REQUEST_METHOD'] === "GET") {
+    require 'views/admin.view.php';
+}
+
+// Arriving here via POST -> process the form
+else if ($_SERVER['REQUEST_METHOD'] === "POST") {
+    // Ensure that the username is not empty
+    if (strlen($_POST['username']) === 0) {
+        $errors['username'] = "A username is required!";
+        $invalid_username = "aria-invalid='true'";
+    }
+
+    if (empty($_POST['password']) === 0) {
+        $errors['password'] = "A password is required!";
+        $invalid_password = "aria-invalid='true'";
+    }
+
+    // TODO: Currently using hard-coded values for username and password.
+    if ($_POST['username'] !== "root" || $_POST['password'] !== "root") {
+        $errors[] = "You have entered an invalid username or password!";
+    }
+
+    // If there are no errors, redirect to the admin page, otherwise display the form again
+    if (empty($errors)) {
+
+        $_SESSION['logged_in'] = true;
+        $_SESSION['username'] = $_POST['username'];
+        // TODO: If the user authenticates correctly, the login status is saved using PHP session state, and the form redirects to the Browse/Filter Page.
+        header("Location: browse.php");
+    } else {
+        require 'views/admin.view.php';
+    }
+}
+
+// Arriving here via any other method -> redirect to the form
+else {
+    header("Location: admin.php");
+}
