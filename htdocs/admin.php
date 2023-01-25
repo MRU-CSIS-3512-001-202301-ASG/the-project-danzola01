@@ -6,7 +6,7 @@ $stylesheets = [
     // "style.css"
 ];
 
-$page_title = "Login Page";
+$page_title = "Admin Portal";
 
 $invalid_username = "";
 $invalid_password = "";
