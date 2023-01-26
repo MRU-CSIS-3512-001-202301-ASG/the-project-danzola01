@@ -66,4 +66,12 @@ $posts = [
         "rating" => 4,
         "image" => "9505897492_kpwsf7"
     ],
+    "09" => [
+        "lat" => 51.049,
+        "long" => -114.071,
+        "city" => "Calgary",
+        "country" => "Canada",
+        "rating" => 4,
+        "image" => "9505897492_kpwsf7"
+    ],
 ];
