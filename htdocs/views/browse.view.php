@@ -5,8 +5,8 @@
     <h1>Browse</h1>
 
     <article class="search">
-        <!-- h2 is here for W3S Validation -->
-        <h2 style="display: none">Sorting</h2>
+        <!-- h2 is here for W3C Validation -->
+        <h2 class="hidden">Sorting</h2>
         <div class=" grid search">
             <!-- Sorting by country -->
             <div>
