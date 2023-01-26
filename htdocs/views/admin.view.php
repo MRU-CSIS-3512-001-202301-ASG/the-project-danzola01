@@ -3,7 +3,10 @@
 <main class="container">
 
     <article>
-        <h1>Welcome Back!</h1>
+        <hgroup>
+            <h1>Admin Portal</h1>
+            <p>Log in to access the admin portal</p>
+        </hgroup>
         <form action="admin.php" method="post">
             <!-- Username -->
             <input type="text" name="username" placeholder="Username" aria-label="Login" autocomplete="nickname"
