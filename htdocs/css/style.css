@@ -16,3 +16,7 @@ footer select {
   width: auto;
   margin: 0 0 0 2em;
 }
+
+.hidden {
+  display: none;
+}
