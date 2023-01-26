@@ -54,8 +54,8 @@
 
                 <!-- Country and City -->
                 <hgroup>
-                    <h2><?= $post['country'] ?></h2>
-                    <p><?= $post['city'] ?></p>
+                    <h2><?= $post['city'] ?></h2>
+                    <p><?= $post['country'] ?></p>
                 </hgroup>
 
                 <!-- Latitude, Longitude, Rating -->
