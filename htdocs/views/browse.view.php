@@ -5,7 +5,9 @@
     <h1>Browse</h1>
 
     <article class="search">
-        <div class="grid search">
+        <!-- h2 is here for W3S Validation -->
+        <h2 style="display: none">Sorting</h2>
+        <div class=" grid search">
             <!-- Sorting by country -->
             <div>
                 <select id="sort_country" name="sort_country">
@@ -36,55 +38,62 @@
     </article>
 
     <!-- Displaying the thumbnails with info -->
+    <?php
+    $counter = 0;
+    foreach ($posts as $postID => $post) :
+        if ($counter % 3 == 0) : ?>
     <div class="grid">
-        <!-- Loop to keep the columns to a max of three posts-->
-        <?php
-        $iteration = 0;
-        foreach ($posts as $post) :
-            if ($iteration % 3 === 0) {
-                echo '<div>';
-            }
-        ?>
-        <article>
-            <!-- Image -->
-            <header>
-                <img src="<?= cloudinary_src($post['image']) ?>">
-            </header>
+        <?php endif; ?>
+        <div>
+            <article>
+                <!-- Image -->
+                <header>
+                    <img src="<?= cloudinary_src($post['image']) ?>"
+                        alt="Image from <?= $post['city'] . ", " . $post['country'] ?>">
+                </header>
 
-            <!-- Country and City -->
-            <hgroup>
-                <h2><?= $post['country'] ?></h2>
-                <h3><?= $post['city'] ?></h3>
-            </hgroup>
+                <!-- Country and City -->
+                <hgroup>
+                    <h2><?= $post['country'] ?></h2>
+                    <p><?= $post['city'] ?></p>
+                </hgroup>
 
-            <!-- Latitude, Longitude, Rating -->
-            <ul>
-                <li>Latitude: <?= $post['lat'] ?></li>
-                <li>Longitude: <?= $post['long'] ?></li>
-                <li>Rating: <?= $post['rating'] ?></li>
-            </ul>
+                <!-- Latitude, Longitude, Rating -->
+                <ul>
+                    <li>Latitude: <?= $post['lat'] ?></li>
+                    <li>Longitude: <?= $post['long'] ?></li>
+                    <li>Rating: <?= $post['rating'] ?></li>
+                </ul>
 
-            <!-- Change rating -->
-            <footer>
-                <label for="new_rating">Change rating</label>
-                <select id="new_rating" name="new_rating">
-                    <option value="" selected>...</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
-            </footer>
-        </article>
-        <?php
-            $iteration++;
-            if ($iteration % 3 === 0) {
-                echo '</div>';
-            }
-        endforeach;
-        ?>
+                <footer>
+                    <form action="/browse.php" method="post">
+                        <!-- Chnage Rating -->
+                        <label for="<?= "new_rating_" . $postID ?>">Change rating</label>
+                        <select id="<?= "new_rating_" . $postID ?>" name="<?= "new_rating_" . $postID ?>">
+                            <option value="" selected>...</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+
+                        <!-- Hidden field to carry post ID -->
+                        <input type="hidden" name="post_id" value="<?= $postID ?>">
+
+                        <!-- Submit button -->
+                        <button type="submit" name="submit" class="contrast">Submit</button>
+                    </form>
+                </footer>
+            </article>
+        </div>
+        <?php if ($counter % 3 == 2) : ?>
     </div>
+    <?php endif;
+            $counter++;
+        endforeach;
+    ?>
+
 </main>
 
 <?php require 'partials/footer.php' ?>
