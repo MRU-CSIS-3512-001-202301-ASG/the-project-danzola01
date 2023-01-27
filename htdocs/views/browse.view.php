@@ -60,8 +60,8 @@
 
                 <!-- Latitude, Longitude, Rating -->
                 <ul>
-                    <li>Latitude: <?= $post['lat'] ?></li>
-                    <li>Longitude: <?= $post['long'] ?></li>
+                    <li>Latitude: <?= $post['latitude'] ?></li>
+                    <li>Longitude: <?= $post['longitude'] ?></li>
                     <li>Rating: <?= $post['rating'] ?></li>
                 </ul>
 

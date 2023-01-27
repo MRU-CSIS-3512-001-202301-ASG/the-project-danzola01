@@ -8,7 +8,7 @@ $stylesheets = [
 
 $page_title = "Browse/Filter";
 
-require 'temp.data.php';
+require 'database/db_handler.php';
 
 // If the user is not logged in, redirect to the login page
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
