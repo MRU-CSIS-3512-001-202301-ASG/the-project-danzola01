@@ -1,4 +1,5 @@
 <?php
+
 // This project will only focus on posts made by the user with ID 23
 $target_user = 23;
 
@@ -29,9 +30,24 @@ function get_imageID_from_userID($dbh, $userID)
     return $results;
 }
 
+function cloudinary_src($path)
+{
+    return "https://res.cloudinary.com/dqg3qyjio/image/upload/v1674841639/3512-2023-01-project-images/{$path}";
+}
+
+function get_image($dbh, $image_id)
+{
+    $sql = "SELECT Path FROM imagedetails WHERE ImageID = :id";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $image_id);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return cloudinary_src($results[0]['Path']);
+}
+
 function get_city($dbh, $image_id)
 {
-    $sql = "SELECT cities.AsciiName FROM cities inner join imagedetails on cities.CityCode = imagedetails.CityCode where imagedetails.ImageID = :id";
+    $sql = "SELECT cities.AsciiName FROM cities INNER JOIN imagedetails ON cities.CityCode = imagedetails.CityCode WHERE imagedetails.ImageID = :id";
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $image_id);
     $stmt->execute();
@@ -41,7 +57,7 @@ function get_city($dbh, $image_id)
 
 function get_country($dbh, $image_id)
 {
-    $sql = "SELECT countries.CountryName FROM countries inner join imagedetails on countries.ISO = imagedetails.CountryCodeISO where imagedetails.ImageID = :id";
+    $sql = "SELECT countries.CountryName FROM countries INNER JOIN imagedetails on countries.ISO = imagedetails.CountryCodeISO where imagedetails.ImageID = :id";
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $image_id);
     $stmt->execute();
@@ -87,7 +103,7 @@ $posts = [];
 
 foreach ($image_ids as $image_id) {
     $posts[] = [
-        'image' => '9505897492_kpwsf7',
+        'image' => get_image($dbh, $image_id['ImageID']),
         'city' => get_city($dbh, $image_id['ImageID']),
         'country' => get_country($dbh, $image_id['ImageID']),
         'latitude' => get_longitute($dbh, $image_id['ImageID']),

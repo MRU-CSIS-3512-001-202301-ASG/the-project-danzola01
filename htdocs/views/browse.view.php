@@ -41,15 +41,14 @@
     <?php
     $counter = 0;
     foreach ($posts as $postID => $post) :
-        if ($counter % 3 == 0) : ?>
+        if ($counter % 2 == 0) : ?>
     <div class="grid">
         <?php endif; ?>
         <div>
             <article>
                 <!-- Image -->
                 <header>
-                    <img src="<?= cloudinary_src($post['image']) ?>"
-                        alt="Image from <?= $post['city'] . ", " . $post['country'] ?>">
+                    <img src="<?= $post['image'] ?>" alt="Image from <?= $post['city'] . ", " . $post['country'] ?>">
                 </header>
 
                 <!-- Country and City -->
@@ -87,7 +86,7 @@
                 </footer>
             </article>
         </div>
-        <?php if ($counter % 3 == 2) : ?>
+        <?php if ($counter % 2 == 1) : ?>
     </div>
     <?php endif;
             $counter++;
