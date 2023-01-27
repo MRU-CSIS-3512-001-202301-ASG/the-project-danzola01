@@ -54,14 +54,14 @@
 
                 <!-- Country and City -->
                 <hgroup>
-                    <h2><?= $post['country'] ?></h2>
-                    <p><?= $post['city'] ?></p>
+                    <h2><?= $post['city'] ?></h2>
+                    <p><?= $post['country'] ?></p>
                 </hgroup>
 
                 <!-- Latitude, Longitude, Rating -->
                 <ul>
-                    <li>Latitude: <?= $post['lat'] ?></li>
-                    <li>Longitude: <?= $post['long'] ?></li>
+                    <li>Latitude: <?= $post['latitude'] ?></li>
+                    <li>Longitude: <?= $post['longitude'] ?></li>
                     <li>Rating: <?= $post['rating'] ?></li>
                 </ul>
 
