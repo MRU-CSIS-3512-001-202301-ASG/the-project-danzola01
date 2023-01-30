@@ -41,7 +41,7 @@
     <?php
     $counter = 0;
     foreach ($posts as $postID => $post) :
-        if ($counter % 2 == 0) : ?>
+        if ($counter % 3 == 0) : ?>
     <div class="grid">
         <?php endif; ?>
         <div>
@@ -86,7 +86,7 @@
                 </footer>
             </article>
         </div>
-        <?php if ($counter % 2 == 1) : ?>
+        <?php if ($counter % 3 == 2) : ?>
     </div>
     <?php endif;
             $counter++;

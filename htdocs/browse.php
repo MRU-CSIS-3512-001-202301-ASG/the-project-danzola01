@@ -17,7 +17,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 
 // If the user is logged in, display the browse page
 else {
-    require 'helpers.php';
     require 'views/browse.view.php';
 }
 
