@@ -9,7 +9,7 @@
  */
 function get_imageID_from_userID($dbh, $userID = TARGET_USER)
 {
-    $sql = "SELECT ImageID from imagerating where UserID = :id";
+    $sql = "SELECT ImageID from imagerating where UserID = :id LIMIT 9";
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $userID);
     $stmt->execute();
