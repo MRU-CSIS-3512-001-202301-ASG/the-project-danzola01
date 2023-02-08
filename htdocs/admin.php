@@ -3,7 +3,7 @@
 session_start();
 
 $stylesheets = [
-    // "style.css"
+    "style.css"
 ];
 
 $page_title = "Admin Portal";

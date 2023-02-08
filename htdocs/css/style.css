@@ -20,3 +20,12 @@ footer select {
 .hidden {
   display: none;
 }
+
+.change_rating_submit select{
+  margin: 0 0 1em 0;
+  
+}
+
+.button_login {
+  margin: 0 0 0 0;
+}
