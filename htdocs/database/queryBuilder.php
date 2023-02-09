@@ -5,13 +5,17 @@
  * 
  * @param PDO $dbh
  * @param int $userID
+ * @param int $offset - offset for pagination
+ * @param int $limit - limit for pagination
  * @return array $results - array of image IDs
  */
-function get_imageID_from_userID($dbh, $userID = TARGET_USER)
+function get_imageID_from_userID($dbh, $userID = TARGET_USER, $offset = 0, $limit = 9)
 {
-    $sql = "SELECT ImageID from imagerating where UserID = :id LIMIT 9";
+    $sql = "SELECT ImageID FROM imagerating WHERE UserID = :id LIMIT :offset, :limit";
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $userID);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $results;
@@ -71,7 +75,7 @@ function get_city($dbh, $image_id)
  */
 function get_country($dbh, $image_id)
 {
-    $sql = "SELECT countries.CountryName FROM countries INNER JOIN imagedetails on countries.ISO = imagedetails.CountryCodeISO WHERE imagedetails.ImageID = :id";
+    $sql = "SELECT countries.CountryName FROM countries INNER JOIN imagedetails ON countries.ISO = imagedetails.CountryCodeISO WHERE imagedetails.ImageID = :id";
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $image_id);
     $stmt->execute();
@@ -146,4 +150,20 @@ function set_rating($dbh, $image_id, $rating, $target = TARGET_USER)
     $stmt->bindParam(':rating', $rating);
     $stmt->bindParam(':user_id', $target);
     $stmt->execute();
+}
+
+/**
+ * Gets the number of images in the database
+ * 
+ * @param PDO $dbh
+ * @return int number of images
+ */
+function get_image_count($dbh, $target = TARGET_USER)
+{
+    $sql = "SELECT COUNT(*) FROM imagerating WHERE UserID= :user_id";
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id', $target);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results[0]['COUNT(*)'];
 }
