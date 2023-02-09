@@ -9,12 +9,16 @@ $stylesheets = [
 $page_title = "Browse/Filter";
 
 // Connect to the database
+require './constants.php';
 require 'database/DatabaseHelper.php';
 require 'database/queryBuilder.php';
 
 $config = require 'database/config.php';
 $dbClass = new DatabaseHelper($config);
 $dbh = $dbClass->getDb();
+
+// Get the page number from the URL
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
 
 $image_ids = get_imageID_from_userID($dbh);
 

@@ -1,8 +1,5 @@
 <?php
 
-// This project will only focus on posts made by the user with ID 23
-define('TARGET_USER', 23);
-
 class DatabaseHelper
 {
     public $dbh;
