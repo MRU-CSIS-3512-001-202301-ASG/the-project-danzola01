@@ -9,7 +9,7 @@
  * @param int $limit - limit for pagination
  * @return array $results - array of image IDs
  */
-function get_imageID_from_userID($dbh, $userID = TARGET_USER, $offset = 0, $limit = 9)
+function get_imageID_from_userID($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
 {
     $sql = "SELECT ImageID FROM imagerating WHERE UserID = :id LIMIT :offset, :limit";
     $stmt = $dbh->prepare($sql);

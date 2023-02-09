@@ -20,7 +20,12 @@ $dbh = $dbClass->getDb();
 // Get the page number from the URL
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
 
-$image_ids = get_imageID_from_userID($dbh);
+// Get total pages that will be displayed
+$total_pages = ceil(get_image_count($dbh) / IMAGES_PER_PAGE);
+
+$offset = ($page - 1) * IMAGES_PER_PAGE;
+
+$image_ids = get_imageID_from_userID($dbh, $offset);
 
 $posts = [];
 
