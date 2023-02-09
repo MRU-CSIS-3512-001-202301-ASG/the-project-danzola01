@@ -24,9 +24,3 @@
 - This time it adheres much more to the functional requirements
 - Have a working admin page to log in
 - Have a working browse page to view all the images
-
-## Week of Jan 30th
-- Worked on fixing up queries, restructuring the database clases.
-
-## Week of Feb 6th
-- Completed pagination for the browse page
