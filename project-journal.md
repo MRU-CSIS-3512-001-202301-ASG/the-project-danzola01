@@ -24,3 +24,11 @@
 - This time it adheres much more to the functional requirements
 - Have a working admin page to log in
 - Have a working browse page to view all the images
+
+## Week of Jan 30th
+- Not a lot of work done this week
+- Restructured the way the db is set up to be more in line with class examples
+
+## Week of Feb 6th
+- Fixed querys to retrieve proper data
+- Completed pagination for browse page
