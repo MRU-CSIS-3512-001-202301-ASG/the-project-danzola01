@@ -9,6 +9,7 @@ $stylesheets = [
 $page_title = "Browse/Filter";
 
 // Connect to the database
+require './constants.php';
 require 'database/DatabaseHelper.php';
 require 'database/queryBuilder.php';
 
@@ -16,7 +17,15 @@ $config = require 'database/config.php';
 $dbClass = new DatabaseHelper($config);
 $dbh = $dbClass->getDb();
 
-$image_ids = get_imageID_from_userID($dbh);
+// Get the page number from the URL
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+// Get total pages that will be displayed
+$total_pages = ceil(get_image_count($dbh) / IMAGES_PER_PAGE);
+
+$offset = ($page - 1) * IMAGES_PER_PAGE;
+
+$image_ids = get_imageID_from_userID($dbh, $offset);
 
 $posts = [];
 

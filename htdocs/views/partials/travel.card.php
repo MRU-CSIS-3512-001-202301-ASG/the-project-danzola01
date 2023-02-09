@@ -1,7 +1,7 @@
 <article>
     <!-- Image -->
     <header>
-        <img src="<?= $post['image'] ?>" alt="Image from <?= $post['city'] . ", " . $post['country'] ?>">
+        <img class="center" src="<?= $post['image'] ?>" alt="Image from <?= $post['city'] . ", " . $post['country'] ?>">
     </header>
 
     <!-- Country and City -->

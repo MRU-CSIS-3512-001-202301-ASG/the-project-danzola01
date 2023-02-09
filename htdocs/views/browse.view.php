@@ -56,4 +56,4 @@
 
 </main>
 
-<?php require 'partials/footer.php' ?>
+<?php require 'partials/browse.footer.php' ?>
