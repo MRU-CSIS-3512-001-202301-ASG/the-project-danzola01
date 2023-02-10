@@ -32,3 +32,7 @@
 ## Week of Feb 6th
 - Fixed querys to retrieve proper data
 - Completed pagination for browse page
+- Created all of the querys for the browse page
+- Fixed favicon
+- Still link the querys to the search selects
+- Rating sort is not working for some reason
