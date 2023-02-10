@@ -25,7 +25,34 @@ $total_pages = ceil(get_image_count($dbh) / IMAGES_PER_PAGE);
 
 $offset = ($page - 1) * IMAGES_PER_PAGE;
 
-$image_ids = get_imageID_from_userID($dbh, $offset);
+// Determine the sort order
+if (isset($_GET['sort'])) {
+    $sort = $_GET['sort'];
+} else {
+    $sort = 'country_AZ';
+}
+
+// Switch statement to determine the sort order
+switch ($sort) {
+    case 'country_AZ':
+        $image_ids = get_imageID_from_userID_sort_country_AZ($dbh, $offset);
+        break;
+    case 'country_ZA':
+        $image_ids = get_imageID_from_userID_sort_country_ZA($dbh, $offset);
+        break;
+    case 'city_AZ':
+        $image_ids = get_imageID_from_userID_sort_city_AZ($dbh, $offset);
+        break;
+    case 'city_ZA':
+        $image_ids = get_imageID_from_userID_sort_city_ZA($dbh, $offset);
+        break;
+    case 'rating_HL':
+        $image_ids = get_imageID_from_userID_sort_rating_HL($dbh, $offset);
+        break;
+    case 'rating_LH':
+        $image_ids = get_imageID_from_userID_sort_rating_LH($dbh, $offset);
+        break;
+}
 
 $posts = [];
 

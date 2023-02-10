@@ -11,7 +11,198 @@
  */
 function get_imageID_from_userID($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
 {
-    $sql = "SELECT ImageID FROM imagerating WHERE UserID = :id LIMIT :offset, :limit";
+    $sql = <<<STMT
+    SELECT ImageID 
+    FROM imagerating 
+    WHERE UserID = :id 
+    LIMIT :offset, :limit
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $userID);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+
+/**
+ * Returns an array of image IDs for a given user ID, ordered by country name
+ * 
+ * @param PDO $dbh
+ * @param int $userID
+ * @param int $offset - offset for pagination
+ * @param int $limit - limit for pagination
+ * @return array $results - array of image IDs ordered by country name
+ */
+function get_imageID_from_userID_sort_country_AZ($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
+{
+    $sql = <<<STMT
+    SELECT imagerating.ImageID 
+    FROM countries 
+    INNER JOIN imagedetails 
+    ON countries.ISO = imagedetails.CountryCodeISO 
+    INNER JOIN imagerating 
+    ON imagerating.ImageID = imagedetails.ImageID 
+    WHERE imagerating.UserID = :id 
+    ORDER BY countries.CountryName 
+    LIMIT :offset, :limit
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $userID);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+
+/**
+ * Returns an array of image IDs for a given user ID, ordered by descending country name
+ * 
+ * @param PDO $dbh
+ * @param int $userID
+ * @param int $offset - offset for pagination
+ * @param int $limit - limit for pagination
+ * @return array $results - array of image IDs ordered by descending country name
+ */
+function get_imageID_from_userID_sort_country_ZA($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
+{
+    $sql = <<<STMT
+    SELECT imagerating.ImageID 
+    FROM countries 
+    INNER JOIN imagedetails 
+    ON countries.ISO = imagedetails.CountryCodeISO 
+    INNER JOIN imagerating 
+    ON imagerating.ImageID = imagedetails.ImageID 
+    WHERE imagerating.UserID = :id 
+    ORDER BY countries.CountryName DESC 
+    LIMIT :offset, :limit;
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $userID);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+
+/**
+ * Returns an array of image IDs for a given user ID, ordered by city name
+ * 
+ * @param PDO $dbh
+ * @param int $userID
+ * @param int $offset - offset for pagination
+ * @param int $limit - limit for pagination
+ * @return array $results - array of image IDs ordered by city name
+ */
+function get_imageID_from_userID_sort_city_AZ($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
+{
+    $sql = <<<STMT
+    SELECT imagerating.ImageID 
+    FROM cities 
+    INNER JOIN imagedetails 
+    ON cities.CityCode = imagedetails.CityCode 
+    INNER JOIN imagerating 
+    ON imagerating.ImageID = imagedetails.ImageID 
+    WHERE imagerating.UserID = :id 
+    ORDER BY cities.AsciiName 
+    LIMIT :offset, :limit
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $userID);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+// TODO - NOT WORKING
+/**
+ * Returns an array of image IDs for a given user ID, ordered by descending city name
+ * 
+ * @param PDO $dbh
+ * @param int $userID
+ * @param int $offset - offset for pagination
+ * @param int $limit - limit for pagination
+ * @return array $results - array of image IDs ordered by descending city name
+ */
+function get_imageID_from_userID_sort_city_ZA($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
+{
+    $sql = <<<STMT
+    SELECT imagerating.ImageID 
+    FROM cities 
+    INNER JOIN imagedetails 
+    ON cities.CityCode = imagedetails.CityCode 
+    INNER JOIN imagerating 
+    ON imagerating.ImageID = imagedetails.ImageID 
+    WHERE imagerating.UserID = :id 
+    ORDER BY cities.AsciiName DESC 
+    LIMIT :offset, :limit
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $userID);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+
+// TODO - NOT WORKING
+/**
+ * Returns an array of image IDs for a given user ID, ordered by rating 5-->1
+ * 
+ * @param PDO $dbh
+ * @param int $userID
+ * @param int $offset - offset for pagination
+ * @param int $limit - limit for pagination
+ * @return array $results - array of image IDs ordered by rating 5-->1
+ */
+function get_imageID_from_userID_sort_rating_HL($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
+{
+    $sql = <<<STMT
+    SELECT imagerating.ImageID 
+    FROM imagerating 
+    WHERE imagerating.UserID = :id 
+    ORDER BY imagerating.Rating DESC;
+    LIMIT :offset, :limit
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':id', $userID);
+    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+
+/**
+ * Returns an array of image IDs for a given user ID, ordered by rating 1-->5
+ * 
+ * @param PDO $dbh
+ * @param int $userID
+ * @param int $offset - offset for pagination
+ * @param int $limit - limit for pagination
+ * @return array $results - array of image IDs ordered by rating 1-->5
+ */
+function get_imageID_from_userID_sort_rating_LH($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
+{
+    $sql = <<<STMT
+    SELECT imagerating.ImageID 
+    FROM imagerating 
+    WHERE imagerating.UserID = :id 
+    ORDER BY imagerating.Rating 
+    LIMIT :offset, :limit
+    STMT;
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $userID);
     $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
