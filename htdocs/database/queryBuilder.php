@@ -171,7 +171,7 @@ function get_imageID_from_userID_sort_rating_HL($dbh, $offset, $userID = TARGET_
     SELECT imagerating.ImageID 
     FROM imagerating 
     WHERE imagerating.UserID = :id 
-    ORDER BY imagerating.Rating DESC;
+    ORDER BY imagerating.Rating DESC
     LIMIT :offset, :limit
     STMT;
 

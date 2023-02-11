@@ -25,7 +25,7 @@ $total_pages = ceil(get_image_count($dbh) / IMAGES_PER_PAGE);
 
 $offset = ($page - 1) * IMAGES_PER_PAGE;
 
-// Determine the sort order
+// Get the sort order from the query string
 if (isset($_GET['sort'])) {
     $sort = $_GET['sort'];
 } else {
