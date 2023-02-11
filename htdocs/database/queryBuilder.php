@@ -220,7 +220,7 @@ function get_imageID_from_userID_sort_rating_LH($dbh, $offset, $userID = TARGET_
  */
 function cloudinary_src($path)
 {
-    return "https://res.cloudinary.com/dqg3qyjio/image/upload/v1674841639/3512-2023-01-project-images/{$path}";
+    return "https://res.cloudinary.com/dqg3qyjio/image/upload/t_browse/v1674841639/3512-2023-01-project-images/{$path}";
 }
 
 /**
@@ -232,7 +232,12 @@ function cloudinary_src($path)
  */
 function get_image($dbh, $image_id)
 {
-    $sql = "SELECT imagedetails.Path FROM imagedetails WHERE ImageID = :id";
+    $sql = <<<STMT
+    SELECT imagedetails.Path 
+    FROM imagedetails 
+    WHERE ImageID = :id
+    STMT;
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $image_id);
     $stmt->execute();
@@ -249,7 +254,13 @@ function get_image($dbh, $image_id)
  */
 function get_city($dbh, $image_id)
 {
-    $sql = "SELECT cities.AsciiName FROM cities INNER JOIN imagedetails ON cities.CityCode = imagedetails.CityCode WHERE imagedetails.ImageID = :id";
+    $sql = <<<STMT
+    SELECT cities.AsciiName 
+    FROM cities 
+    INNER JOIN imagedetails ON cities.CityCode = imagedetails.CityCode 
+    WHERE imagedetails.ImageID = :id
+    STMT;
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $image_id);
     $stmt->execute();
@@ -266,7 +277,13 @@ function get_city($dbh, $image_id)
  */
 function get_country($dbh, $image_id)
 {
-    $sql = "SELECT countries.CountryName FROM countries INNER JOIN imagedetails ON countries.ISO = imagedetails.CountryCodeISO WHERE imagedetails.ImageID = :id";
+    $sql = <<<STMT
+    SELECT countries.CountryName 
+    FROM countries 
+    INNER JOIN imagedetails ON countries.ISO = imagedetails.CountryCodeISO 
+    WHERE imagedetails.ImageID = :id
+    STMT;
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $image_id);
     $stmt->execute();
@@ -283,7 +300,12 @@ function get_country($dbh, $image_id)
  */
 function get_longitute($dbh, $image_id)
 {
-    $sql = "SELECT Longitude FROM imagedetails WHERE ImageID = :id";
+    $sql = <<<STMT
+    SELECT Longitude 
+    FROM imagedetails 
+    WHERE ImageID = :id
+    STMT;
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $image_id);
     $stmt->execute();
@@ -300,7 +322,12 @@ function get_longitute($dbh, $image_id)
  */
 function get_latitude($dbh, $image_id)
 {
-    $sql = "SELECT Latitude FROM imagedetails WHERE ImageID = :id";
+    $sql = <<<STMT
+    SELECT Latitude 
+    FROM imagedetails 
+    WHERE ImageID = :id
+    STMT;
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $image_id);
     $stmt->execute();
@@ -317,7 +344,12 @@ function get_latitude($dbh, $image_id)
  */
 function get_rating($dbh, $image_id)
 {
-    $sql = "SELECT Rating FROM imagerating WHERE ImageID = :id";
+    $sql = <<<STMT
+    SELECT Rating 
+    FROM imagerating 
+    WHERE ImageID = :id
+    STMT;
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':id', $image_id);
     $stmt->execute();
@@ -335,7 +367,13 @@ function get_rating($dbh, $image_id)
  */
 function set_rating($dbh, $image_id, $rating, $target = TARGET_USER)
 {
-    $sql = "UPDATE imagerating SET Rating=:rating WHERE ImageID=:image_id AND UserID=:user_id";
+    $sql = <<<STMT
+    UPDATE imagerating 
+    SET Rating=:rating 
+    WHERE ImageID=:image_id 
+    AND UserID=:user_id
+    STMT;
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':image_id', $image_id);
     $stmt->bindParam(':rating', $rating);
@@ -351,7 +389,12 @@ function set_rating($dbh, $image_id, $rating, $target = TARGET_USER)
  */
 function get_image_count($dbh, $target = TARGET_USER)
 {
-    $sql = "SELECT COUNT(*) FROM imagerating WHERE UserID= :user_id";
+    $sql = <<<STMT
+    SELECT COUNT(*) 
+    FROM imagerating 
+    WHERE UserID= :user_id
+    STMT;
+
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':user_id', $target);
     $stmt->execute();
