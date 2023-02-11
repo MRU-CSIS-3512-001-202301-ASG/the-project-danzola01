@@ -1,42 +1,41 @@
-<article>
+<tr>
     <!-- Image -->
-    <header>
+    <th scope="row">
         <img class="center" src="<?= $post['image'] ?>" alt="Image from <?= $post['city'] . ", " . $post['country'] ?>">
-    </header>
+    </th>
 
-    <!-- Country and City -->
-    <hgroup>
-        <h2><?= $post['city'] ?></h2>
-        <p><?= $post['country'] ?></p>
-    </hgroup>
+    <!-- Country -->
+    <td><?= $post['country'] ?></td>
 
-    <!-- Latitude, Longitude, Rating -->
-    <ul>
-        <li>Latitude: <?= $post['latitude'] ?></li>
-        <li>Longitude: <?= $post['longitude'] ?></li>
-        <li class="test">Rating: <?= $post['rating'] ?></li>
-    </ul>
+    <!-- City -->
+    <td><?= $post['city'] ?></td>
+
+    <!-- Latitude -->
+    <td><?= $post['latitude'] ?></td>
+
+    <!-- Longitude -->
+    <td><?= $post['longitude'] ?></td>
+
+    <!-- Rating -->
+    <td><?= $post['rating'] ?></td>
 
     <!-- Change Rating -->
-    <footer>
-        <form class="change_rating_submit" action="/browse.php" method="post">
-            <div class="block">
-                <label for="<?= "new_rating_" . $image_id ?>">Change rating</label>
-                <select id="<?= "new_rating_" . $image_id ?>" name="<?= "new_rating_" . $image_id ?>">
-                    <option value="" selected>...</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                </select>
-            </div>
+    <td>
+        <form class="margin_0" action="../../browse.php">
+            <!-- Select new rating -->
+            <select class="select_new_rating margin_0" id="<?= "new_rating_" . $image_id ?>" name="<?= "new_rating_" . $image_id ?>">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+            </select>
 
             <!-- Hidden field to carry ImageID -->
             <input type="hidden" name="image_id" value="<?= $image_id ?>">
 
-            <!-- Submit button -->
-            <button type="submit" name="submit" class="contrast">Submit</button>
+            <!-- Submit new rating -->
+            <input class="submit_new_rating contrast" type="submit">
         </form>
-    </footer>
-</article>
+    </td>
+</tr>

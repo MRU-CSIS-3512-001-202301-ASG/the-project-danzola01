@@ -4,7 +4,7 @@
 
     <h1>Browse</h1>
 
-    <article class="search">
+    <article class="container search">
         <!-- h2 is here for W3C Validation -->
         <h2 class="hidden">Sorting</h2>
         <div class=" grid search">
@@ -38,21 +38,28 @@
     </article>
 
     <!-- Displaying the thumbnails with info -->
-    <?php
-    $counter = 0;
-    foreach ($posts as $postID => $post) :
-        if ($counter % 3 == 0) : ?>
-            <div class="grid">
-            <?php endif; ?>
-            <div>
-                <?php require 'partials/travel.card.php' ?>
-            </div>
-            <?php if ($counter % 3 == 2) : ?>
-            </div>
-    <?php endif;
-            $counter++;
-        endforeach;
-    ?>
+    <table role="grid">
+        <thead>
+            <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Country</th>
+                <th scope="col">City</th>
+                <th scope="col">Latitude</th>
+                <th scope="col">Longitude</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Change Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($posts as $postID => $post) : ?>
+
+                <div>
+                    <?php require 'partials/travel.card.php' ?>
+                </div>
+
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
 </main>
 
