@@ -7,33 +7,42 @@
     <article class="container search">
         <!-- h2 is here for W3C Validation -->
         <h2 class="hidden">Sorting</h2>
-        <div class=" grid search">
+
+        <div class="grid search">
             <!-- Sorting by country -->
-            <div>
-                <select id="sort_country" name="sort_country">
-                    <option value="" selected>Sort by Country...</option>
-                    <option>A ⟶ Z</option>
-                    <option>Z ⟶ A</option>
-                </select>
-            </div>
+            <details role="list">
+                <summary aria-haspopup="listbox" role="button" class="secondary">
+                    Sort by Country...
+                </summary>
+                <ul role="listbox">
+                    <li><a href="browse.php?sort=country_AZ">A ⟶ Z</a></li>
+                    <li><a href="browse.php?sort=country_ZA">Z ⟶ A</a></li>
+                </ul>
+            </details>
 
             <!-- Sorting by city -->
-            <div>
-                <select id="sort_city" name="sort_city">
-                    <option value="" selected>Sort by City...</option>
-                    <option>A ⟶ Z</option>
-                    <option>Z ⟶ A</option>
-                </select>
-            </div>
+            <details role="list">
+                <summary aria-haspopup="listbox" role="button" class="secondary">
+                    Sort by City...
+                </summary>
+                <ul role="listbox">
+                    <li><a href="browse.php?sort=city_AZ">A ⟶ Z</a></li>
+                    <li><a href="browse.php?sort=city_ZA">Z ⟶ A</a></li>
+                </ul>
+            </details>
 
-            <!-- Sorting by rating -->
-            <div>
-                <select id="sort_rating" name="sort_rating">
-                    <option value="" selected>Sort by Rating...</option>
-                    <option>High ⟶ Low</option>
-                    <option>Low ⟶ High</option>
-                </select>
-            </div>
+
+            <!-- Sort by Rating -->
+            <details role="list">
+                <summary aria-haspopup="listbox" role="button" class="secondary">
+                    Sort by Rating...
+                </summary>
+                <ul role="listbox">
+                    <li><a href="browse.php?sort=rating_HL">5 ⟶ 1</a></li>
+                    <li><a href="browse.php?sort=rating_LH">1 ⟶ 5</a></li>
+                </ul>
+            </details>
+
         </div>
     </article>
 
