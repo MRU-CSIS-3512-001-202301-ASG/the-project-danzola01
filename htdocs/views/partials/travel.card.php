@@ -1,23 +1,23 @@
 <tr>
     <!-- Image -->
     <th scope="row">
-        <img class="center" src="<?= $post['image'] ?>" alt="Image from <?= $post['city'] . ", " . $post['country'] ?>">
+        <img class="center" src="<?= cloudinary_src($post['Path']) ?>" alt="Image from <?= $post['CityName'] . ", " . $post['CountryName'] ?>">
     </th>
 
     <!-- Country -->
-    <td><?= $post['country'] ?></td>
+    <td><?= $post['CountryName'] ?></td>
 
     <!-- City -->
-    <td><?= $post['city'] ?></td>
+    <td><?= $post['CityName'] ?></td>
 
     <!-- Latitude -->
-    <td><?= $post['latitude'] ?></td>
+    <td><?= $post['Latitude'] ?></td>
 
     <!-- Longitude -->
-    <td><?= $post['longitude'] ?></td>
+    <td><?= $post['Longitude'] ?></td>
 
     <!-- Rating -->
-    <td><?= $post['rating'] ?></td>
+    <td><?= $post['Rating'] ?></td>
 
     <!-- Change Rating -->
     <td>
