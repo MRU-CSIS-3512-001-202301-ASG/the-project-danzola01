@@ -36,3 +36,8 @@
 - Fixed favicon
 - Still link the querys to the search selects
 - Rating sort is not working for some reason
+
+## Week of Feb 13th
+- Completely changed the way that queries are made to the db. This made the page much much faster.
+- 'Fixed' the sorting, it is not doing the paramenter binding
+- Almost done for the php side, just need a few more things like the admin log in
