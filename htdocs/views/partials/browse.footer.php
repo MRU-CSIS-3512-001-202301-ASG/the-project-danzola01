@@ -1,14 +1,14 @@
 <footer class="container pagination">
     <?php
-    if ($page > 1) {
-        $prev_page = $page - 1;
+    if ($current_page > 1) {
+        $prev_page = $current_page - 1;
         $prev = <<<HEREDOC
         <a href="/browse.php?page=$prev_page">Previous</a>
         HEREDOC;
     }
 
-    if ($page < $total_pages) {
-        $next_page = $page + 1;
+    if ($current_page < $total_pages) {
+        $next_page = $current_page + 1;
         $next = <<<HEREDOC
         <a href="/browse.php?page=$next_page">Next</a>
         HEREDOC;
@@ -20,7 +20,7 @@
 
     ?>
     <hr>
-    <p> <?= $prev ?> Page <?= $page ?> of <?= $total_pages ?> <?= $next ?> </p>
+    <p> <?= $prev ?> Page <?= $current_page ?> of <?= $total_pages ?> <?= $next ?> </p>
 </footer>
 
 </body>
