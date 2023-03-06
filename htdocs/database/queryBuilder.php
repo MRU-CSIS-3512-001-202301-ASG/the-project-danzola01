@@ -63,3 +63,18 @@ function set_rating($dbh, $image_id, $rating, $target = TARGET_USER)
     $stmt->bindParam(':user_id', $target);
     $stmt->execute();
 }
+
+function get_digest($dbh, $username)
+{
+    $sql = <<<STMT
+    SELECT digest
+    FROM admins
+    WHERE username=:username
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}

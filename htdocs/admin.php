@@ -8,6 +8,16 @@ $stylesheets = [
 
 $page_title = "Admin Portal";
 
+// Connect to the database
+require './constants.php';
+require 'database/DatabaseHelper.php';
+require 'database/queryBuilder.php';
+
+// Get the database connection
+$config = require 'database/config.php';
+$dbClass = new DatabaseHelper($config);
+$dbh = $dbClass->getDb();
+
 $invalid_username = "";
 $invalid_password = "";
 
@@ -31,10 +41,15 @@ else if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $invalid_password = "aria-invalid='true'";
     }
 
-    // TODO: Currently using hard-coded values for username and password.
-    if ($_POST['username'] !== "root" || $_POST['password'] !== "root") {
+    // Validate the username and password
+    $username = $_POST['username'];
+    $retrieved_digest = get_digest($dbh, $username);
+
+    // If array is empty, the username does not exist
+    if (!empty($retrieved_digest) && password_verify($_POST['password'], $retrieved_digest[0]['digest']) === false) {
         $errors[] = "You have entered an invalid username or password!";
     }
+
 
     // If there are no errors, redirect to the admin page, otherwise display the form again
     if (empty($errors)) {

@@ -21,6 +21,7 @@ $config = require 'database/config.php';
 $dbClass = new DatabaseHelper($config);
 $dbh = $dbClass->getDb();
 
+
 // Get the sort order
 $sort = $_GET['sort'] ?? 'country_AZ';
 
