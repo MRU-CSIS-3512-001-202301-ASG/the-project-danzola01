@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-FROM mcr.microsoft.com/devcontainers/php:0-8.2
-=======
 FROM mcr.microsoft.com/devcontainers/php:dev-8.2-apache-bullseye
->>>>>>> alternate
 
 # Install MariaDB client
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
@@ -12,10 +8,12 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 # Install php-mysql driver
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
+RUN curl -fsSL https://deb.nodesource.com/setup_19.x | sudo -E bash - &&\
+sudo apt-get install -y nodejs
+
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
 
 # [Optional] Uncomment this line to install global node packages.
 # RUN su vscode -c "source /usr/local/share/nvm/nvm.sh && npm install -g <your-package-here>" 2>&1
-
