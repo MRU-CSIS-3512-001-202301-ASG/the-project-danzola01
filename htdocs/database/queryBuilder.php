@@ -75,6 +75,21 @@ function get_digest($dbh, $username)
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':username', $username);
     $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $results = $stmt->fetchAll(PDO::FETCH_COLUMN);
     return $results;
+}
+
+function create_admin($dbh, $username, $password)
+{
+    $digest = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+
+    $sql = <<<STMT
+        INSERT INTO admins(username, digest)
+        VALUES (:user, :digest)
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user', $username);
+    $stmt->bindParam(':digest', $digest);
+    $stmt->execute();
 }
