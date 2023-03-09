@@ -53,3 +53,5 @@
 
 - Had some issues moving the db over from GCP to the codespace but all is good now, and I continued to work on the project.
 - Admin page now has server side validation, ran into a couple issues with this like dealing with the return of the digest when the user is not found. Eventually got everything working.
+- Added functionality to search for country, city, and rating.
+- Added functionality to change the rating.
