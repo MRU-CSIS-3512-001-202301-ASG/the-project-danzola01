@@ -53,6 +53,8 @@ else if ($_SERVER['REQUEST_METHOD'] === "POST") {
     } else {
         if (password_verify($_POST['password'], $retrieved_digest[0]) === false) {
             $errors['validation'] = "You have entered an invalid username or password!";
+            $invalid_password = "true";
+            $invalid_username = "true";
         }
     }
 
