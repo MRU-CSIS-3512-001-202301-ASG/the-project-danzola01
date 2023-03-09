@@ -26,13 +26,30 @@
 - Have a working browse page to view all the images
 
 ## Week of Jan 30th
+
 - Not a lot of work done this week
 - Restructured the way the db is set up to be more in line with class examples
 
 ## Week of Feb 6th
+
 - Fixed querys to retrieve proper data
 - Completed pagination for browse page
 - Created all of the querys for the browse page
 - Fixed favicon
 - Still link the querys to the search selects
 - Rating sort is not working for some reason
+
+## Week of Feb 13th
+
+- Completely changed the way that queries are made to the db. This made the page much much faster.
+- 'Fixed' the sorting, it is not doing the paramenter binding
+- Almost done for the php side, just need a few more things like the admin log in
+
+## Week of Feb 20th and Feb 27th
+
+- Did not do any work at all 😅
+
+## Week of Mar 6th
+
+- Had some issues moving the db over from GCP to the codespace but all is good now, and I continued to work on the project.
+- Admin page now has server side validation, ran into a couple issues with this like dealing with the return of the digest when the user is not found. Eventually got everything working.

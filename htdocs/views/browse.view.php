@@ -4,55 +4,93 @@
 
     <h1>Browse</h1>
 
-    <article class="search">
-        <!-- h2 is here for W3C Validation -->
-        <h2 class="hidden">Sorting</h2>
-        <div class=" grid search">
+    <article class="slim_card">
+        <div class="grid">
             <!-- Sorting by country -->
-            <div>
-                <select id="sort_country" name="sort_country">
-                    <option value="" selected>Sort by Country...</option>
-                    <option>A ⟶ Z</option>
-                    <option>Z ⟶ A</option>
-                </select>
-            </div>
+            <details role="list" class="margin_0">
+                <summary aria-haspopup="listbox" role="button" class="secondary">
+                    Sort by Country...
+                </summary>
+                <ul role="listbox">
+                    <li><a href="browse.php?sort=country_AZ">A ⟶ Z</a></li>
+                    <li><a href="browse.php?sort=country_ZA">Z ⟶ A</a></li>
+                </ul>
+            </details>
 
             <!-- Sorting by city -->
-            <div>
-                <select id="sort_city" name="sort_city">
-                    <option value="" selected>Sort by City...</option>
-                    <option>A ⟶ Z</option>
-                    <option>Z ⟶ A</option>
-                </select>
-            </div>
+            <details role="list" class="margin_0">
+                <summary aria-haspopup="listbox" role="button" class="secondary">
+                    Sort by City...
+                </summary>
+                <ul role="listbox">
+                    <li><a href="browse.php?sort=city_AZ">A ⟶ Z</a></li>
+                    <li><a href="browse.php?sort=city_ZA">Z ⟶ A</a></li>
+                </ul>
+            </details>
 
-            <!-- Sorting by rating -->
-            <div>
-                <select id="sort_rating" name="sort_rating">
-                    <option value="" selected>Sort by Rating...</option>
-                    <option>High ⟶ Low</option>
-                    <option>Low ⟶ High</option>
-                </select>
-            </div>
+
+            <!-- Sort by Rating -->
+            <details role="list" class="margin_0">
+                <summary aria-haspopup="listbox" role="button" class="secondary">
+                    Sort by Rating...
+                </summary>
+                <ul role="listbox">
+                    <li><a href="browse.php?sort=rating_HL">5 ⟶ 1</a></li>
+                    <li><a href="browse.php?sort=rating_LH">1 ⟶ 5</a></li>
+                </ul>
+            </details>
+
         </div>
     </article>
 
-    <!-- Displaying the thumbnails with info -->
-    <?php
-    $counter = 0;
-    foreach ($posts as $postID => $post) :
-        if ($counter % 3 == 0) : ?>
+    <article class='slim_card'>
+
+        <form action="browse.php" method="get" class="margin_0">
             <div class="grid">
-            <?php endif; ?>
+                <!-- Filter by Country-->
+                <input type="search" id="search_country" name="search_country" placeholder="Search by Country">
+
+                <!-- Filter by City-->
+                <input type="search" id="search_city" name="search_city" placeholder="Search by City">
+
+                <!-- Filter by Rating-->
+                <input type="search" id="search_rating" name="search_rating" placeholder="Search by Rating">
+
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" name="search" class="contrast margin_0">Search</button>
+        </form>
+
+    </article>
+
+    <!-- Displaying the thumbnails with info -->
+    <table role="grid">
+        <thead>
+            <tr>
+                <th scope="col">Image</th>
+                <th scope="col">Country</th>
+                <th scope="col">City</th>
+                <th scope="col">Latitude</th>
+                <th scope="col">Longitude</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Change Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($posts as $postID => $post) : ?>
+
             <div>
                 <?php require 'partials/travel.card.php' ?>
             </div>
-            <?php if ($counter % 3 == 2) : ?>
-            </div>
-    <?php endif;
-            $counter++;
-        endforeach;
-    ?>
+
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <?php if (empty($posts)) : ?>
+    <h3 class="no_results">No results found!</h3>
+    <?php endif; ?>
 
 </main>
 

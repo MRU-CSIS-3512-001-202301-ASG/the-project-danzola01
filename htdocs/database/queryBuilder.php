@@ -1,25 +1,38 @@
 <?php
 
 /**
- * Returns an array of image IDs for a given user ID
- * 
+ * Returns all of the information for the current page
+ *
  * @param PDO $dbh
- * @param int $userID
+ * @param int $user_id - user ID (default = TARGET_USER)
  * @param int $offset - offset for pagination
  * @param int $limit - limit for pagination
- * @return array $results - array of image IDs
+ * @return array $results - array of image information
  */
-function get_imageID_from_userID($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
+function get_information($dbh, $order, $offset, $user_id = TARGET_USER, $limit = IMAGES_PER_PAGE)
 {
     $sql = <<<STMT
-    SELECT ImageID 
-    FROM imagerating 
-    WHERE UserID = :id 
+    SELECT imagerating.ImageID,
+           imagedetails.Path,
+           cities.AsciiName AS CityName,
+           countries.CountryName,
+           imagedetails.Longitude,
+           imagedetails.Latitude,
+           imagerating.Rating,
+           (SELECT COUNT(*)
+            FROM imagerating
+            WHERE UserID = :user_id) AS total_ratings
+    FROM imagedetails
+    INNER JOIN cities ON cities.CityCode = imagedetails.CityCode
+    INNER JOIN countries ON countries.ISO = imagedetails.CountryCodeISO
+    LEFT JOIN imagerating ON imagerating.ImageID = imagedetails.ImageID
+    WHERE imagerating.UserID = :user_id
+    ORDER BY $order
     LIMIT :offset, :limit
     STMT;
 
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $userID);
+    $stmt->bindParam(':user_id', $user_id);
     $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
     $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
@@ -27,334 +40,108 @@ function get_imageID_from_userID($dbh, $offset, $userID = TARGET_USER, $limit = 
     return $results;
 }
 
-/**
- * Returns an array of image IDs for a given user ID, ordered by country name
- * 
- * @param PDO $dbh
- * @param int $userID
- * @param int $offset - offset for pagination
- * @param int $limit - limit for pagination
- * @return array $results - array of image IDs ordered by country name
- */
-function get_imageID_from_userID_sort_country_AZ($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
+function get_information_filtered($dbh, $order, $offset, $country_filter = '%', $city_filter = '%', $rating_filter = '%', $user_id = TARGET_USER, $limit = IMAGES_PER_PAGE)
 {
     $sql = <<<STMT
-    SELECT imagerating.ImageID 
-    FROM countries 
-    INNER JOIN imagedetails 
-    ON countries.ISO = imagedetails.CountryCodeISO 
-    INNER JOIN imagerating 
-    ON imagerating.ImageID = imagedetails.ImageID 
-    WHERE imagerating.UserID = :id 
-    ORDER BY countries.CountryName 
+    SELECT imagerating.ImageID,
+           imagedetails.Path,
+           cities.AsciiName AS CityName,
+           countries.CountryName,
+           imagedetails.Longitude,
+           imagedetails.Latitude,
+           imagerating.Rating,
+           (SELECT COUNT(*)
+            FROM imagerating
+            WHERE UserID = :user_id) AS total_ratings
+    FROM imagedetails
+    INNER JOIN cities ON cities.CityCode = imagedetails.CityCode
+    INNER JOIN countries ON countries.ISO = imagedetails.CountryCodeISO
+    LEFT JOIN imagerating ON imagerating.ImageID = imagedetails.ImageID
+    WHERE imagerating.UserID = :user_id
+        AND countries.CountryName LIKE '%' :country_filter '%'
+        AND cities.AsciiName LIKE '%' :city_filter '%'
+        AND imagerating.Rating LIKE '%' :rating_filter '%'
+    ORDER BY $order
     LIMIT :offset, :limit
     STMT;
 
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $userID);
+    $stmt->bindParam(':user_id', $user_id);
     $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
     $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindParam(':country_filter', $country_filter);
+    $stmt->bindParam(':city_filter', $city_filter);
+    $stmt->bindParam(':rating_filter', $rating_filter);
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $results;
-}
-
-/**
- * Returns an array of image IDs for a given user ID, ordered by descending country name
- * 
- * @param PDO $dbh
- * @param int $userID
- * @param int $offset - offset for pagination
- * @param int $limit - limit for pagination
- * @return array $results - array of image IDs ordered by descending country name
- */
-function get_imageID_from_userID_sort_country_ZA($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
-{
-    $sql = <<<STMT
-    SELECT imagerating.ImageID 
-    FROM countries 
-    INNER JOIN imagedetails 
-    ON countries.ISO = imagedetails.CountryCodeISO 
-    INNER JOIN imagerating 
-    ON imagerating.ImageID = imagedetails.ImageID 
-    WHERE imagerating.UserID = :id 
-    ORDER BY countries.CountryName DESC 
-    LIMIT :offset, :limit;
-    STMT;
-
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $userID);
-    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results;
-}
-
-/**
- * Returns an array of image IDs for a given user ID, ordered by city name
- * 
- * @param PDO $dbh
- * @param int $userID
- * @param int $offset - offset for pagination
- * @param int $limit - limit for pagination
- * @return array $results - array of image IDs ordered by city name
- */
-function get_imageID_from_userID_sort_city_AZ($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
-{
-    $sql = <<<STMT
-    SELECT imagerating.ImageID 
-    FROM cities 
-    INNER JOIN imagedetails 
-    ON cities.CityCode = imagedetails.CityCode 
-    INNER JOIN imagerating 
-    ON imagerating.ImageID = imagedetails.ImageID 
-    WHERE imagerating.UserID = :id 
-    ORDER BY cities.AsciiName 
-    LIMIT :offset, :limit
-    STMT;
-
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $userID);
-    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results;
-}
-// TODO - NOT WORKING
-/**
- * Returns an array of image IDs for a given user ID, ordered by descending city name
- * 
- * @param PDO $dbh
- * @param int $userID
- * @param int $offset - offset for pagination
- * @param int $limit - limit for pagination
- * @return array $results - array of image IDs ordered by descending city name
- */
-function get_imageID_from_userID_sort_city_ZA($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
-{
-    $sql = <<<STMT
-    SELECT imagerating.ImageID 
-    FROM cities 
-    INNER JOIN imagedetails 
-    ON cities.CityCode = imagedetails.CityCode 
-    INNER JOIN imagerating 
-    ON imagerating.ImageID = imagedetails.ImageID 
-    WHERE imagerating.UserID = :id 
-    ORDER BY cities.AsciiName DESC 
-    LIMIT :offset, :limit
-    STMT;
-
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $userID);
-    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results;
-}
-
-// TODO - NOT WORKING
-/**
- * Returns an array of image IDs for a given user ID, ordered by rating 5-->1
- * 
- * @param PDO $dbh
- * @param int $userID
- * @param int $offset - offset for pagination
- * @param int $limit - limit for pagination
- * @return array $results - array of image IDs ordered by rating 5-->1
- */
-function get_imageID_from_userID_sort_rating_HL($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
-{
-    $sql = <<<STMT
-    SELECT imagerating.ImageID 
-    FROM imagerating 
-    WHERE imagerating.UserID = :id 
-    ORDER BY imagerating.Rating DESC
-    LIMIT :offset, :limit
-    STMT;
-
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $userID);
-    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results;
-}
-
-/**
- * Returns an array of image IDs for a given user ID, ordered by rating 1-->5
- * 
- * @param PDO $dbh
- * @param int $userID
- * @param int $offset - offset for pagination
- * @param int $limit - limit for pagination
- * @return array $results - array of image IDs ordered by rating 1-->5
- */
-function get_imageID_from_userID_sort_rating_LH($dbh, $offset, $userID = TARGET_USER, $limit = IMAGES_PER_PAGE)
-{
-    $sql = <<<STMT
-    SELECT imagerating.ImageID 
-    FROM imagerating 
-    WHERE imagerating.UserID = :id 
-    ORDER BY imagerating.Rating 
-    LIMIT :offset, :limit
-    STMT;
-
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $userID);
-    $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-    $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results;
-}
-
-/**
- * Returns the link to the image on Cloudinary
- * 
- * @param string $path - filename of image
- * @return string link to image on Cloudinary
- */
-function cloudinary_src($path)
-{
-    return "https://res.cloudinary.com/dqg3qyjio/image/upload/v1674841639/3512-2023-01-project-images/{$path}";
-}
-
-/**
- * Gets the image from the database and returns the link to the image on Cloudinary
- * 
- * @param PDO $dbh
- * @param int $image_id
- * @return string link to image on Cloudinary
- */
-function get_image($dbh, $image_id)
-{
-    $sql = "SELECT imagedetails.Path FROM imagedetails WHERE ImageID = :id";
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $image_id);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return cloudinary_src($results[0]['Path']);
-}
-
-/**
- * Gets the city of the image from the database
- * 
- * @param PDO $dbh
- * @param int $image_id
- * @return string Name of city
- */
-function get_city($dbh, $image_id)
-{
-    $sql = "SELECT cities.AsciiName FROM cities INNER JOIN imagedetails ON cities.CityCode = imagedetails.CityCode WHERE imagedetails.ImageID = :id";
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $image_id);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results[0]['AsciiName'];
-}
-
-/**
- * Gets the country of the image from the database
- * 
- * @param PDO $dbh
- * @param int $image_id
- * @return string Name of country
- */
-function get_country($dbh, $image_id)
-{
-    $sql = "SELECT countries.CountryName FROM countries INNER JOIN imagedetails ON countries.ISO = imagedetails.CountryCodeISO WHERE imagedetails.ImageID = :id";
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $image_id);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results[0]['CountryName'];
-}
-
-/**
- * Gets the longitude of the image from the database
- * 
- * @param PDO $dbh
- * @param int $image_id
- * @return string Longitude of image
- */
-function get_longitute($dbh, $image_id)
-{
-    $sql = "SELECT Longitude FROM imagedetails WHERE ImageID = :id";
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $image_id);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results[0]['Longitude'];
-}
-
-/**
- * Gets the latitude of the image from the database
- * 
- * @param PDO $dbh
- * @param int $image_id
- * @return string Latitude of image
- */
-function get_latitude($dbh, $image_id)
-{
-    $sql = "SELECT Latitude FROM imagedetails WHERE ImageID = :id";
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $image_id);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results[0]['Latitude'];
-}
-
-/**
- * Gets the rating of the image from the database
- * 
- * @param PDO $dbh
- * @param int $image_id
- * @return string Rating of image
- */
-function get_rating($dbh, $image_id)
-{
-    $sql = "SELECT Rating FROM imagerating WHERE ImageID = :id";
-    $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':id', $image_id);
-    $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results[0]['Rating'];
 }
 
 /**
  * Changes the rating of the image on the database
- * 
+ *
  * @param PDO $dbh
  * @param int $image_id
  * @param int $rating - new rating
  * @param int $target - user ID
  */
-function set_rating($dbh, $image_id, $rating, $target = TARGET_USER)
+function set_rating($dbh, $rating, $image_id, $user_id = TARGET_USER)
 {
-    $sql = "UPDATE imagerating SET Rating=:rating WHERE ImageID=:image_id AND UserID=:user_id";
+    $sql = <<<STMT
+    UPDATE imagerating
+    SET Rating=:rating
+    WHERE ImageID=:image_id
+    AND UserID=:user_id
+    STMT;
+
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':image_id', $image_id);
     $stmt->bindParam(':rating', $rating);
-    $stmt->bindParam(':user_id', $target);
+    $stmt->bindParam(':image_id', $image_id);
+    $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
 }
 
 /**
- * Gets the number of images in the database
- * 
+ * Retrieves the digest (password hash) for the user
+ *
  * @param PDO $dbh
- * @return int number of images
+ * @param string $username
+ *
+ * @return array $results - array of digest
  */
-function get_image_count($dbh, $target = TARGET_USER)
+function get_digest($dbh, $username)
 {
-    $sql = "SELECT COUNT(*) FROM imagerating WHERE UserID= :user_id";
+    $sql = <<<STMT
+    SELECT digest
+    FROM admins
+    WHERE username=:username
+    STMT;
+
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':user_id', $target);
+    $stmt->bindParam(':username', $username);
     $stmt->execute();
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return $results[0]['COUNT(*)'];
+    $results = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    return $results;
+}
+
+/**
+ * Creates a new admin user
+ *
+ * @param PDO $dbh
+ * @param string $username - username
+ * @param string $password - (unhashed)
+ */
+function create_admin($dbh, $username, $password)
+{
+    $digest = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+
+    $sql = <<<STMT
+        INSERT INTO admins(username, digest)
+        VALUES (:user, :digest)
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user', $username);
+    $stmt->bindParam(':digest', $digest);
+    $stmt->execute();
 }
