@@ -20,7 +20,10 @@ $config = require 'database/config.php';
 $dbClass = new DatabaseHelper($config);
 $dbh = $dbClass->getDb();
 
+// Array rhat will hold any errors to be displayed
 $errors = [];
+
+// Flags that will be used for the invalid class on the form fields
 $invalid_username = null;
 $invalid_password = null;
 
@@ -48,9 +51,12 @@ else if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $username = $_POST['username'];
     $retrieved_digest = get_digest($dbh, $username);
 
+    // If the username does not exist in the DB, an empty array is returned
     if (empty($retrieved_digest)) {
         $errors['validation'] = "You have entered an invalid username or password!";
-    } else {
+    }
+    // Using password_verify() to compare the password
+    else {
         if (password_verify($_POST['password'], $retrieved_digest[0]) === false) {
             $errors['validation'] = "You have entered an invalid username or password!";
             $invalid_password = "true";
@@ -58,11 +64,12 @@ else if ($_SERVER['REQUEST_METHOD'] === "POST") {
         }
     }
 
-    // If there are no errors, redirect to the admin page, otherwise display the form again
+    // If there are no errors, redirect to the browse page, otherwise display the form again
     if (empty($errors)) {
-
+        // Set some session variables for the user
         $_SESSION['logged_in'] = true;
         $_SESSION['username'] = $_POST['username'];
+        // Redirect to the browse page
         header("Location: browse.php");
     } else {
         require 'views/admin.view.php';
