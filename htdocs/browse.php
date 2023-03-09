@@ -57,10 +57,10 @@ switch ($sort) {
         $sort = 'cities.AsciiName DESC';
         break;
     case 'rating_HL':
-        $sort = 'imagerating.Rating';
+        $sort = 'imagerating.Rating DESC';
         break;
     case 'rating_LH':
-        $sort = 'imagerating.Rating';
+        $sort = 'ratings.Rating';
         break;
 }
 
@@ -71,12 +71,22 @@ $current_page = $_GET['page'] ?? 1;
 $offset = ($current_page - 1) * IMAGES_PER_PAGE;
 
 // Call the database for the images and their information
-
 $posts = get_information($dbh, $sort, $offset);
+
+if (isset($_GET['search_country']) || isset($_GET['search_city']) || isset($_GET['search_rating'])) {
+    $search_country = $_GET['search_country'] ?? "";
+    $search_city = $_GET['search_city'] ?? "";
+    $search_rating = $_GET['search_rating'] ?? "";
+    $posts = get_information_filtered($dbh, $sort, $offset, $search_country, $search_city, $search_rating);
+}
 
 
 // Get total pages that will be displayed
-$total_pages = ceil($posts[0]['total_ratings'] / IMAGES_PER_PAGE);
+if (empty($posts)) {
+    $total_pages = 1;
+} else {
+    $total_pages = ceil($posts[0]['total_ratings'] / IMAGES_PER_PAGE);
+}
 
 // If the user is logged in, display the browse page
 require 'views/browse.view.php';

@@ -1,6 +1,6 @@
-.search {
-  margin: 0;
-  padding: 20px 20px;
+.slim_card {
+  padding: 40px;
+  margin: 20px 0;
 }
 
 footer label {
@@ -17,9 +17,8 @@ footer select {
   display: none;
 }
 
-.change_rating_submit select{
+.change_rating_submit select {
   margin: 0 0 1em 0;
-  
 }
 
 .button_login {
@@ -29,7 +28,7 @@ footer select {
 .pagination {
   text-align: center;
   padding: 0;
-}   
+}
 
 hr {
   padding: 0 0 1em 0;
@@ -39,6 +38,11 @@ hr {
   margin: 0;
 }
 
-.select_new_rating{
+.select_new_rating {
   margin: 0 0 1em 0;
+}
+
+.no_results {
+  text-align: center;
+  padding: 1em;
 }
