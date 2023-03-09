@@ -1,12 +1,19 @@
 <?php
-
+// Start the PHP session
 session_start();
 
+// Link to the stylesheet
 $stylesheets = [
     "style.css"
 ];
 
+// Set the page title
 $page_title = "Browse/Filter";
+
+// If the user is not logged in, redirect to the login page
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header("Location: admin.php");
+}
 
 // Require helper for cloudinary
 require './helpers/helpers.php';
@@ -25,6 +32,16 @@ $dbh = $dbClass->getDb();
 // Get the sort order
 $sort = $_GET['sort'] ?? 'country_AZ';
 
+// If the user has selected a sort order, set a cookie
+if (isset($_GET['sort'])) {
+    setcookie('sort', $_GET['sort'], strtotime('+1day'));
+    $sort = $_GET['sort'];
+}
+// If the user has not selected a sort order, but there is a cookie, use the cookie
+else if (isset($_COOKIE['sort'])) {
+    $sort = $_COOKIE['sort'];
+}
+
 // Switch statement to determine the sort order
 switch ($sort) {
     case 'country_AZ':
@@ -34,16 +51,16 @@ switch ($sort) {
         $sort = 'countries.CountryName DESC';
         break;
     case 'city_AZ':
-        $sort = 3;
+        $sort = 'cities.AsciiName';
         break;
     case 'city_ZA':
-        $sort = 3 . ' DESC';
+        $sort = 'cities.AsciiName DESC';
         break;
     case 'rating_HL':
-        $sort = 7 . ' DESC';
+        $sort = 'imagerating.Rating';
         break;
     case 'rating_LH':
-        $sort = 7;
+        $sort = 'imagerating.Rating';
         break;
 }
 
@@ -61,12 +78,5 @@ $posts = get_information($dbh, $sort, $offset);
 // Get total pages that will be displayed
 $total_pages = ceil($posts[0]['total_ratings'] / IMAGES_PER_PAGE);
 
-// If the user is not logged in, redirect to the login page
-if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
-    header("Location: admin.php");
-}
-
 // If the user is logged in, display the browse page
-else {
-    require 'views/browse.view.php';
-}
+require 'views/browse.view.php';
