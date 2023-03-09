@@ -95,8 +95,8 @@ function set_rating($dbh, $rating, $image_id, $user_id = TARGET_USER)
     STMT;
 
     $stmt = $dbh->prepare($sql);
-    $stmt->bindParam(':rating', $rating);
-    $stmt->bindParam(':image_id', $image_id);
+    $stmt->bindParam(':rating', $rating, PDO::PARAM_INT);
+    $stmt->bindParam(':image_id', $image_id, PDO::PARAM_INT);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->execute();
 }

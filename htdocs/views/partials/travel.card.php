@@ -22,7 +22,7 @@
 
     <!-- Change Rating -->
     <td>
-        <form class="margin_0" action="../../browse.php">
+        <form class="margin_0" method="POST" action="../../browse.php">
             <!-- Select new rating -->
             <select class="select_new_rating margin_0" id="new_rating" name="new_rating">
                 <option value="1">1</option>

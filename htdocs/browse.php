@@ -10,6 +10,9 @@ $stylesheets = [
 // Set the page title
 $page_title = "Browse/Filter";
 
+// Valid rating values
+$valid_ratings = array(1, 2, 3, 4, 5);
+
 // If the user is not logged in, redirect to the login page
 if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: admin.php");
@@ -28,6 +31,17 @@ $config = require 'database/config.php';
 $dbClass = new DatabaseHelper($config);
 $dbh = $dbClass->getDb();
 
+// If request is a POST --> change rating
+if ($_SERVER['REQUEST_METHOD'] === "POST") {
+    // Get the values from the form
+    $image_id = intval($_POST['image_id']) ?? "";
+    $new_rating = intval($_POST['new_rating']) ?? "";
+
+    // Call the function to change the rating
+    if (isset($_POST['new_rating']) && in_array($new_rating, $valid_ratings)) {
+        set_rating($dbh, $new_rating, $image_id);
+    }
+}
 
 // Get the sort order
 $sort = $_GET['sort'] ?? 'country_AZ';
@@ -73,13 +87,13 @@ $offset = ($current_page - 1) * IMAGES_PER_PAGE;
 // Call the database for the images and their information
 $posts = get_information($dbh, $sort, $offset);
 
+// If the user has specified a search,  call the database for the filtered images
 if (isset($_GET['search_country']) || isset($_GET['search_city']) || isset($_GET['search_rating'])) {
     $search_country = $_GET['search_country'] ?? "";
     $search_city = $_GET['search_city'] ?? "";
     $search_rating = $_GET['search_rating'] ?? "";
     $posts = get_information_filtered($dbh, $sort, $offset, $search_country, $search_city, $search_rating);
 }
-
 
 // Get total pages that will be displayed
 if (empty($posts)) {
