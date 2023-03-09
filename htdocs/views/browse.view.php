@@ -47,14 +47,17 @@
 
         <form action="browse.php" method="get" class="margin_0">
             <div class="grid">
-                <!-- Filter by Country-->
-                <input type="search" id="search_country" name="search_country" placeholder="Search by Country">
+                <!-- Search by Country-->
+                <input type="search" id="search_country" name="search_country" placeholder="Search by Country"
+                    value=<?= $search_country ?? "" ?>>
 
-                <!-- Filter by City-->
-                <input type="search" id="search_city" name="search_city" placeholder="Search by City">
+                <!-- Search by City-->
+                <input type="search" id="search_city" name="search_city" placeholder="Search by City"
+                    value=<?= $search_city ?? "" ?>>
 
-                <!-- Filter by Rating-->
-                <input type="search" id="search_rating" name="search_rating" placeholder="Search by Rating">
+                <!-- Search by Rating-->
+                <input type="search" id="search_rating" name="search_rating" placeholder="Search by Rating"
+                    value=<?= $search_rating ?? "" ?>>
 
             </div>
 
@@ -81,7 +84,9 @@
             <?php foreach ($posts as $postID => $post) : ?>
 
             <div>
-                <?php require 'partials/travel.card.php' ?>
+                <?php
+                    $image_id = $post['ImageID'];
+                    require 'partials/travel.card.php' ?>
             </div>
 
             <?php endforeach; ?>
