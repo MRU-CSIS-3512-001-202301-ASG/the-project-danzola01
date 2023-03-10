@@ -58,3 +58,4 @@
 - After merging branches it seems that my DB disappeared?? Had to run the script again and recreate tables and data.
 - Finished the API endpoints.
 - I believe that the only thing missing from the backend is the confirmation message after changing the rating.
+- Finished adding a confirmation message after changing the rating.
