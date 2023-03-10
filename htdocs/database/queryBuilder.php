@@ -152,28 +152,59 @@ function create_admin($dbh, $username, $password)
  *
  * @param PDO $dbh
  * 
- * 
+ * @return array $results - array of dead drops
  */
 function get_drops($dbh, $user_id = TARGET_USER)
 {
     $sql = <<<STMT
     SELECT cities.AsciiName AS city,
            countries.CountryName AS country,
-           imagedetails.Longitude AS lat,
-           imagedetails.Latitude AS long,
-           (SELECT COUNT(*)
-            FROM imagerating
-            WHERE UserID = :user_id
-            AND Rating=3) AS total_count
+           imagedetails.Longitude AS "long",
+           imagedetails.Latitude AS "lat"
     FROM imagedetails
     INNER JOIN cities ON cities.CityCode = imagedetails.CityCode
     INNER JOIN countries ON countries.ISO = imagedetails.CountryCodeISO
     LEFT JOIN imagerating ON imagerating.ImageID = imagedetails.ImageID
     WHERE imagerating.UserID = :user_id
+        AND imagerating.Rating = 3
     STMT;
 
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+
+/**
+ * Used for the ddrop.php?city={city_id} endpoint, it has city as a query parameter and
+ * will output the city, country, and lat/long values of all currently active dead drops
+ * that match the city.
+ *
+ * @param PDO $dbh
+ * @param string $city_id
+ * 
+ * @return array $results - array of city, country, long, lat
+ */
+function get_drops_in_city($dbh, $city_id, $user_id = TARGET_USER)
+{
+    $sql = <<<STMT
+    SELECT cities.AsciiName AS city,
+           countries.CountryName AS country,
+           imagedetails.Longitude AS "long",
+           imagedetails.Latitude AS "lat"
+    FROM imagedetails
+    INNER JOIN cities ON cities.CityCode = imagedetails.CityCode
+    INNER JOIN countries ON countries.ISO = imagedetails.CountryCodeISO
+    LEFT JOIN imagerating ON imagerating.ImageID = imagedetails.ImageID
+    WHERE imagerating.UserID = :user_id
+        AND imagerating.Rating = 3
+        AND cities.CityCode = :city_id
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->bindParam(':city_id', $city_id);
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $results;
