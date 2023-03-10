@@ -103,4 +103,5 @@ if (empty($posts)) {
 }
 
 // If the user is logged in, display the browse page
-require 'views/browse.view.php';
+require 'views/browse.view.php';\
+
