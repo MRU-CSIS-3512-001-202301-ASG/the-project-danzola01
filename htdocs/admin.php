@@ -12,11 +12,11 @@ $page_title = "Admin Portal";
 
 // Connect to the database
 require './constants.php';
-require 'database/DatabaseHelper.php';
-require 'database/queryBuilder.php';
+require '../database/DatabaseHelper.php';
+require '../database/queryBuilder.php';
 
 // Get the database connection
-$config = require 'database/config.php';
+$config = require '../database/config.php';
 $dbClass = new DatabaseHelper($config);
 $dbh = $dbClass->getDb();
 
