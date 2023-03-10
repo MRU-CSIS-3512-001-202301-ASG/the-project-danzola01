@@ -1,8 +1,7 @@
 <tr>
     <!-- Image -->
     <th scope="row">
-        <img class="center" src="<?= cloudinary_src($post['Path']) ?>"
-            alt="Image from <?= $post['CityName'] . ", " . $post['CountryName'] ?>">
+        <img class="center" src="<?= cloudinary_src($post['Path']) ?>" alt="Image from <?= $post['CityName'] . ", " . $post['CountryName'] ?>">
     </th>
 
     <!-- Country -->

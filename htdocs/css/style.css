@@ -50,3 +50,9 @@ hr {
 .th_center {
   text-align: center;
 }
+
+.rating_success {
+  text-align: center;
+  margin: 5px;
+  padding: 10px;
+}

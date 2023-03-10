@@ -64,6 +64,13 @@
 
     </article>
 
+
+    <?php if (isset($_POST['submit_new_rating'])) : ?>
+        <article class="rating_success">
+            <p class="rating_success"><kbd>Rating changed successfully!</kbd></p>
+        </article>
+    <?php endif ?>
+
     <!-- Displaying the thumbnails with info -->
     <table role="grid">
         <thead>
