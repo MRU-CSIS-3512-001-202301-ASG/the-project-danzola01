@@ -55,3 +55,6 @@
 - Admin page now has server side validation, ran into a couple issues with this like dealing with the return of the digest when the user is not found. Eventually got everything working.
 - Added functionality to search for country, city, and rating.
 - Added functionality to change the rating.
+- After merging branches it seems that my DB disappeared?? Had to run the script again and recreate tables and data.
+- Finished the API endpoints.
+- I believe that the only thing missing from the backend is the confirmation message after changing the rating.
