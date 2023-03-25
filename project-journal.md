@@ -59,3 +59,15 @@
 - Finished the API endpoints.
 - I believe that the only thing missing from the backend is the confirmation message after changing the rating.
 - Finished adding a confirmation message after changing the rating.
+
+## Week of Mar 13th
+
+- Barelly any work done this week, I was busy with other classes and work.
+
+## Week of Mar 20th
+
+- Finally had some actual time to work on the project.
+- Begun the JS side of the project.
+- Definitely need to work on my JS skills, I feel like I need to think about things a different way becuasse my code feels very bulky
+- Country list is being displayed, user can search by country
+- If a country is clicked on, the city list is displayed
