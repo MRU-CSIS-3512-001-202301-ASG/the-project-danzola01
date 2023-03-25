@@ -151,7 +151,7 @@ function create_admin($dbh, $username, $password)
  * the city, country, and lat/long values of all currently active dead drops.
  *
  * @param PDO $dbh
- * 
+ *
  * @return array $results - array of dead drops
  */
 function get_drops($dbh, $user_id = TARGET_USER)
@@ -183,7 +183,7 @@ function get_drops($dbh, $user_id = TARGET_USER)
  *
  * @param PDO $dbh
  * @param string $city_id
- * 
+ *
  * @return array $results - array of city, country, long, lat
  */
 function get_drops_in_city($dbh, $city_id, $user_id = TARGET_USER)
@@ -205,6 +205,55 @@ function get_drops_in_city($dbh, $city_id, $user_id = TARGET_USER)
     $stmt = $dbh->prepare($sql);
     $stmt->bindParam(':user_id', $user_id);
     $stmt->bindParam(':city_id', $city_id);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+/**
+ * TODO
+ *
+ * @param PDO $dbh
+ * @param string $city_id
+ *
+ * @return array $results - array of countries with their ISO codes
+ */
+function get_country_list($dbh, $country_filter = '%', $user_id = TARGET_USER)
+{
+    $sql = <<<STMT
+    SELECT DISTINCT countries.CountryName,
+           countries.ISO
+    FROM imagedetails
+    INNER JOIN countries ON countries.ISO = imagedetails.CountryCodeISO
+    LEFT JOIN imagerating ON imagerating.ImageID = imagedetails.ImageID
+    WHERE imagerating.UserID = :user_id
+        AND countries.CountryName LIKE :country_filter '%'
+    ORDER BY countries.CountryName
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->bindParam(':country_filter', $country_filter);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+
+// TODO
+function get_cities_from_country($dbh, $iso = '%', $user_id = TARGET_USER)
+{
+    $sql = <<<STMT
+    SELECT DISTINCT cities.AsciiName AS CityName
+    FROM imagedetails
+    INNER JOIN cities ON cities.CityCode = imagedetails.CityCode
+    LEFT JOIN imagerating ON imagerating.ImageID = imagedetails.ImageID
+    WHERE imagerating.UserID = :user_id
+        AND cities.CountryCodeISO = :iso
+    ORDER BY cities.AsciiName
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':user_id', $user_id);
+    $stmt->bindParam(':iso', $iso);
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $results;
