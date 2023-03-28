@@ -18,21 +18,20 @@ $config = require '../../database/config.php';
 $dbClass = new DatabaseHelper($config);
 $dbh = $dbClass->getDb();
 
-// Get the query string items
-$country = $_GET['country'] ?? "";
-$iso = $_GET['iso'] ?? "";
+// Grab the query string items
+$countryISO = $_GET['countryISO'];
 
-if (isset($_GET['iso'])) {
-    // Call the DB for the city names
-    $results = get_cities_from_country($dbh, $iso);
+// if the countryISO is set, then we want to get the posts for that country
+if (isset($countryISO)) {
+    $results = get_cities_from_country($dbh, $countryISO);
 
     // Build the response
     $response = [
         'cities' => $results
     ];
 } else {
-    // Call the DB for the posts
-    $results = get_country_list($dbh, $country);
+    // otherwise, we want to get all the posts
+    $results = get_country_list($dbh);
 
     // Build the response
     $response = [
