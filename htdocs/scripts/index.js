@@ -2,105 +2,127 @@ import { Endpoint } from "./endpoint.js";
 
 const endpoint = new Endpoint();
 
-async function listAllCountries() {
+async function getCountryList() {
   // Request the data
-  let request = endpoint.for({});
+  let countryEndpoint = endpoint.for({});
 
   //   Fetch the data from the API.
-  let response = await fetch(request);
+  let response = await fetch(countryEndpoint);
 
   //   Parse the response as JSON.
-  let data = await response.json();
+  let countryList = await response.json();
 
+  // Save the country list to local storage.
+  localStorage.setItem("countryList", JSON.stringify(countryList));
+
+  return countryList;
+}
+
+function displayCountries(countryList) {
   //   Select the div where the data will be displayed.
   let div = document.querySelector(".country_list");
 
   //   Loop through the data and display it as an accordion.
-  for (let country of data.countries) {
+  for (let country of countryList.countries) {
     let details = document.createElement("details");
     let summary = document.createElement("summary");
     let p = document.createElement("p");
 
     summary.textContent = country.CountryName;
+    summary.setAttribute("data-iso", country.ISO);
 
     details.append(summary);
     details.append(p);
+
     div.append(details);
-
-    // When the user clicks on a summary element, display the cities in that country.
-    summary.addEventListener("click", async function () {
-      //   Clear the p element.
-      p.replaceChildren();
-
-      let cities = await listCities(country.ISO);
-
-      let ul = document.createElement("ul");
-
-      for (let city of cities) {
-        let li = document.createElement("li");
-
-        li.textContent = city.CityName;
-
-        ul.append(li);
-        p.append(ul);
-      }
-    });
   }
 }
 
-async function listCities(iso) {
-  // Request the data
-  let request = endpoint.for({
-    iso: iso,
-  });
-  //   Fetch the data from the API.
-  let response = await fetch(request);
+// Filter the countries
+function filterCountries(search) {
+  let currentCountryList = document.querySelector(".country_list");
+  let searchValue = search.target.value.toLowerCase();
 
-  //   Parse the response as JSON.
-  let data = await response.json();
+  console.log(searchValue);
 
-  return data.cities;
+  // Loop through the currentCountryList and hide the ones that don't match the search value.
+  for (let country of currentCountryList.children) {
+    if (
+      !country.children[0].textContent.toLowerCase().startsWith(searchValue)
+    ) {
+      country.style.display = "none";
+    }
+  }
+
+  // If the search value is empty, display all the countries.
+  if (searchValue === "") {
+    for (let country of currentCountryList.children) {
+      country.style.display = "block";
+    }
+  }
 }
 
-//  Display all the data when the page loads.
-listAllCountries();
+async function getCityList(iso) {
+  // Request the data
+  let cityEndpoint = endpoint.for({ iso: iso });
 
-// Set a listener on the search input.
-let search = document.querySelector("#search");
+  //   Fetch the data from the API.
+  let response = await fetch(cityEndpoint);
 
-// When the user types in the search input, display the results.
-search.addEventListener("keyup", async function () {
-  //  If the search input is empty, display all the data.
-  if (search.value === "") {
-    listAllCountries();
+  //   Parse the response as JSON.
+  let cityList = await response.json();
+
+  return cityList;
+}
+
+async function displayCities(event) {
+  if (event.target.tagName !== "SUMMARY") {
     return;
   }
 
-  //   Select the div where the data will be displayed.
-  let div = document.querySelector(".country_list");
+  // Get the ISO code from the clicked country.
+  let iso = event.target.getAttribute("data-iso");
 
-  //  Clear the div.
-  div.replaceChildren();
+  // Get the cities from the API.
+  let cities = await getCityList(iso);
 
-  //   Request the data.
-  let request = endpoint.for({
-    country: search.value,
-  });
+  // Display the cities under the p element of the clicked country.
+  let p = event.target.parentElement.children[1];
 
-  //   Fetch the data from the API.
-  let response = await fetch(request);
+  let ul = document.createElement("ul");
 
-  //   Parse the response as JSON.
-  let data = await response.json();
-
-  //   Loop through the data and display it as an accordion.
-  for (let country of data.countries) {
-    let details = document.createElement("details");
-    let summary = document.createElement("summary");
-
-    summary.textContent = country.CountryName;
-
-    details.append(summary);
-    div.append(details);
+  // Loop through the cities and display them.
+  for (let city of cities.cities) {
+    let li = document.createElement("li");
+    li.textContent = city.CityName;
+    ul.append(li);
   }
-});
+
+  p.append(ul);
+
+  // If there are no cities, display a message.
+  if (cities.cities.length === 0) {
+    p.textContent = "No cities found.";
+  }
+}
+
+// Check if the country list is in local storage.
+if (localStorage.getItem("countryList")) {
+  // If it is, display the countries.
+  let countryList = JSON.parse(localStorage.getItem("countryList"));
+  displayCountries(countryList);
+} else {
+  // If it isn't, get the country list from the API.
+  let countryList = await getCountryList();
+  displayCountries(countryList);
+}
+
+// Set a listener on the search input.
+let search = document.querySelector("#country_search");
+
+// When the user types in the search input, display the results.
+search.addEventListener("keyup", filterCountries);
+
+// When the user clicks on a country, display the cities.
+let countryListDiv = document.querySelector(".country_list");
+countryListDiv.addEventListener("click", displayCities);
