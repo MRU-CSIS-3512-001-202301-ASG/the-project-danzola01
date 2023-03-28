@@ -16,7 +16,7 @@ function Endpoint() {
 
     // if the iso is set, add it to the URL.
     if (context.iso) {
-      return this.base + "?iso=" + context.iso;
+      return this.base + "?countryISO=" + context.iso;
     }
   };
 }
