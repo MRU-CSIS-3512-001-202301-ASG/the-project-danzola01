@@ -48,13 +48,16 @@
         <form action="browse.php" method="get" class="margin_5">
             <div class="grid">
                 <!-- Search by Country-->
-                <input type="search" id="search_country" name="search_country" placeholder="Search by Country" value=<?= $search_country ?? "" ?>>
+                <input type="search" id="search_country" name="search_country" placeholder="Search by Country"
+                    value=<?= $search_country ?? '""' ?>>
 
                 <!-- Search by City-->
-                <input type="search" id="search_city" name="search_city" placeholder="Search by City" value=<?= $search_city ?? "" ?>>
+                <input type="search" id="search_city" name="search_city" placeholder="Search by City"
+                    value=<?= $search_city ?? '""' ?>>
 
                 <!-- Search by Rating-->
-                <input type="search" id="search_rating" name="search_rating" placeholder="Search by Rating" value=<?= $search_rating ?? "" ?>>
+                <input type="search" id="search_rating" name="search_rating" placeholder="Search by Rating"
+                    value=<?= $search_rating ?? '""' ?>>
 
             </div>
 
@@ -66,9 +69,9 @@
 
 
     <?php if (isset($_POST['submit_new_rating'])) : ?>
-        <article class="rating_success">
-            <p class="rating_success"><kbd>Rating changed successfully!</kbd></p>
-        </article>
+    <article class="rating_success">
+        <p class="rating_success"><kbd>Rating changed successfully!</kbd></p>
+    </article>
     <?php endif ?>
 
     <!-- Displaying the thumbnails with info -->
@@ -84,21 +87,20 @@
                 <th class="th_center" scope="col">Change Rating</th>
             </tr>
         </thead>
+
         <tbody>
             <?php foreach ($posts as $postID => $post) : ?>
 
-                <div>
-                    <?php
-                    $image_id = $post['ImageID'];
-                    require 'partials/travel.card.php' ?>
-                </div>
+            <?php
+                $image_id = $post['ImageID'];
+                require 'partials/travel.card.php' ?>
 
             <?php endforeach; ?>
         </tbody>
     </table>
 
     <?php if (empty($posts)) : ?>
-        <h3 class="no_results">No results found!</h3>
+    <h3 class="no_results">No results found!</h3>
     <?php endif; ?>
 
 </main>
