@@ -41,6 +41,12 @@
                 name="country_search"
                 placeholder="Filter by Country"
               />
+
+              <!-- Checkbox for images only -->
+              <label for="images_only">
+                <input type="checkbox" id="images_only" name="images_only" />
+                Only show countries that have images
+              </label>
             </header>
 
             <!-- The country list is in the main of the article -->
@@ -48,22 +54,7 @@
           </article>
 
           <!-- Country information -->
-          <article id="country_info" class="hidden scroll">
-            <header></header>
-            <hgroup>
-              <h1>Country</h1>
-              <h2>Capital</h2>
-            </hgroup>
-            <footer>
-              <p>area</p>
-              <p>population</p>
-              <p>currency</p>
-              <p>domain</p>
-              <p>description</p>
-              <p>languages</p>
-              <p>neighbouring countries</p>
-            </footer>
-          </article>
+          <article id="country_info" class="hidden scroll"></article>
         </div>
       </div>
     </body>

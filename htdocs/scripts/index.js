@@ -17,8 +17,11 @@ async function getCountryList() {
   // Parse the response as JSON.
   let countryList = await response.json();
 
+  console.log(countryList);
+
   // Save the country list to local storage.
-  localStorage.setItem("countryList", JSON.stringify(countryList));
+  // TODO UNCOMMENT THIS LINE
+  // localStorage.setItem("countryList", JSON.stringify(countryList));
 
   return countryList;
 }
@@ -62,6 +65,7 @@ function displayCountries(countryList) {
     // Add the necessary data to the Summary element.
     summary.textContent = country.CountryName;
     summary.setAttribute("data-iso", country.ISO);
+    details.setAttribute("data-hasImage", country.HasPath);
 
     // Append the accordion to the div.
     details.append(summary);
@@ -192,6 +196,13 @@ async function displayCities(event) {
   // Select the accordion where the data will be displayed.
   let accordion = event.target.parentElement;
 
+  // loop through the accordion and remove the city list.
+  for (let child of accordion.children) {
+    if (child.nodeName === "UL") {
+      child.remove();
+    }
+  }
+
   // Create a list to display the cities.
   let cityListElement = document.createElement("ul");
 
@@ -213,6 +224,29 @@ async function displayCities(event) {
   accordion.append(cityListElement);
 }
 
+function hideCountriesWithoutImages() {
+  // return if checkbox is not checked
+  if (!document.querySelector("#images_only").checked) {
+    // Show all the countries.
+    for (let country of currentCountryList.children) {
+      country.style.display = "block";
+    }
+
+    return;
+  }
+
+  // Hide the countries without images.
+  let countryList = document.querySelector("#country_list");
+
+  console.log(countryList.children);
+
+  for (let country of countryList.children) {
+    if (country.getAttribute("data-hasImage") === "0") {
+      country.style.display = "none";
+    }
+  }
+}
+
 // Check if the country list is in local storage.
 if (localStorage.getItem("countryList")) {
   // If it is, display the countries.
@@ -231,3 +265,6 @@ search.addEventListener("keyup", filterCountries);
 // Call the handleCountryClick function when a summary is clicked.
 let currentCountryList = document.querySelector("#country_list");
 currentCountryList.addEventListener("click", handleCountryClick);
+
+let imagesOnly = document.querySelector("#images_only");
+imagesOnly.addEventListener("change", hideCountriesWithoutImages);

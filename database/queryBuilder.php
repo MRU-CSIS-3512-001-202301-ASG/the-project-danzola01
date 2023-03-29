@@ -221,8 +221,10 @@ function get_country_list($dbh)
 {
     $sql = <<<STMT
     SELECT DISTINCT CountryName,
-        ISO
+        ISO,
+        CASE WHEN imagedetails.Path IS NOT NULL THEN true ELSE false END AS HasPath
     FROM countries
+    LEFT JOIN imagedetails ON countries.ISO = imagedetails.CountryCodeISO
     ORDER BY CountryName
     STMT;
 
