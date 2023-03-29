@@ -19,7 +19,7 @@ $dbClass = new DatabaseHelper($config);
 $dbh = $dbClass->getDb();
 
 // Grab the query string items
-$countryISO = $_GET['countryISO'];
+$countryISO = $_GET['countryISO'] ?? null;
 
 // if the countryISO is set, then we want to get the posts for that country
 if (isset($countryISO)) {
