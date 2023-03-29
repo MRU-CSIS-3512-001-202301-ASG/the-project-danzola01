@@ -89,3 +89,11 @@ hr {
 .visible {
   display: block;
 }
+
+.scroll {
+  overflow: scroll;
+}
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}

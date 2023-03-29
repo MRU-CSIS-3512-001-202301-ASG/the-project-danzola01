@@ -30,12 +30,6 @@ if (isset($_GET['city'])) {
     $response = [
         'num_drops' => count($results),
     ];
-
-    // Set the header to the correct content type
-    header('Content-Type: application/json');
-
-    // Echo the result of calling json_encode() on the built response
-    echo json_encode($response);
 } else {
     // Call the DB for the drops
     $results = get_drops($dbh);
@@ -45,10 +39,10 @@ if (isset($_GET['city'])) {
         'total_count' => count($results),
         'drops' => $results
     ];
-
-    // Set the header to the correct content type
-    header('Content-Type: application/json');
-
-    // Echo the result of calling json_encode() on the built response
-    echo json_encode($response);
 }
+
+// Set the header to the correct content type
+header('Content-Type: application/json');
+
+// Echo the result of calling json_encode() on the built response
+echo json_encode($response);

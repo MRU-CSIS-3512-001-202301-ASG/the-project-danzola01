@@ -28,7 +28,7 @@
     <body>
       <div class="container">
         <div class="grid">
-          <!-- Country List -->
+          <!-- Countries -->
           <article>
             <!-- Header has title and search-->
             <header>
@@ -44,26 +44,25 @@
             </header>
 
             <!-- The country list is in the main of the article -->
-            <div class="country_list"></div>
+            <div id="country_list" class="scroll"></div>
           </article>
 
-          <!-- City List -->
-          <article id="city_list" class="hidden">
-            <!-- Header has title and search-->
-            <header>
-              <h2 id="city_title">City List</h2>
-
-              <!-- City Search -->
-              <input
-                type="search"
-                id="city_search"
-                name="city_search"
-                placeholder="Filter by City"
-              />
-            </header>
-
-            <!-- The city list is in the main of the article -->
-            <div class="city_list"></div>
+          <!-- Country information -->
+          <article id="country_info" class="hidden scroll">
+            <header></header>
+            <hgroup>
+              <h1>Country</h1>
+              <h2>Capital</h2>
+            </hgroup>
+            <footer>
+              <p>area</p>
+              <p>population</p>
+              <p>currency</p>
+              <p>domain</p>
+              <p>description</p>
+              <p>languages</p>
+              <p>neighbouring countries</p>
+            </footer>
           </article>
         </div>
       </div>
