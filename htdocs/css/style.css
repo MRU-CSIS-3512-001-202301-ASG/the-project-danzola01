@@ -56,3 +56,36 @@ hr {
   margin: 5px;
   padding: 10px;
 }
+
+.bold {
+  font-weight: bold;
+}
+
+.logout {
+  width: 150px;
+}
+
+.li_country {
+  list-style-type: none;
+}
+
+.border_0 {
+  border: 0;
+}
+
+.margin_hr {
+  margin: 1em 0;
+}
+
+.padding_0 {
+  padding: 0;
+}
+
+.hrAsLi {
+  margin: 1em 0;
+  padding: 0;
+}
+
+.visible {
+  display: block;
+}
