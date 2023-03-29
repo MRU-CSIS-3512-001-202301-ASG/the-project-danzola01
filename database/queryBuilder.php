@@ -256,9 +256,9 @@ function get_country_information($dbh, $iso)
         Area,
         Population,
         Capital,
-        CurrencyName,
-        TopLevelDomain,
-        CountryDescription,
+        CurrencyName AS Currency,
+        TopLevelDomain AS Domain,
+        CountryDescription AS Description,
         Languages,
         Neighbours
     FROM countries
