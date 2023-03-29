@@ -1,8 +1,9 @@
 <tr>
     <!-- Image -->
-    <th scope="row">
-        <img class="center" src="<?= cloudinary_src($post['Path']) ?>" alt="Image from <?= $post['CityName'] . ", " . $post['CountryName'] ?>">
-    </th>
+    <td>
+        <img class="center" src="<?= cloudinary_src($post['Path']) ?>"
+            alt="Image from <?= $post['CityName'] . ", " . $post['CountryName'] ?>">
+    </td>
 
     <!-- Country -->
     <td><?= $post['CountryName'] ?></td>
@@ -23,7 +24,7 @@
     <td>
         <form class="margin_0" method="POST" action="../../browse.php">
             <!-- Select new rating -->
-            <select class="select_new_rating margin_0" id="new_rating" name="new_rating">
+            <select class="select_new_rating margin_0" name="new_rating">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
