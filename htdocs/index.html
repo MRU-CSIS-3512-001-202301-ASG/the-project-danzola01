@@ -12,6 +12,9 @@
         href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
       />
 
+      <!-- Custom CSS -->
+      <link rel="stylesheet" href="css/style.css" />
+
       <!-- Favicon -->
       <link rel="icon" type="image/x-icon" href="../../images/favicon.ico" />
 
@@ -24,24 +27,45 @@
 
     <body>
       <div class="container">
-        <!-- Country list is inside article -->
-        <article>
-          <!-- Header has title and search-->
-          <header>
-            <h2>Country List</h2>
+        <div class="grid">
+          <!-- Country List -->
+          <article>
+            <!-- Header has title and search-->
+            <header>
+              <h2>Country List</h2>
 
-            <!-- Country Search -->
-            <input
-              type="search"
-              id="country_search"
-              name="country_search"
-              placeholder="Filter by Country"
-            />
-          </header>
+              <!-- Country Search -->
+              <input
+                type="search"
+                id="country_search"
+                name="country_search"
+                placeholder="Filter by Country"
+              />
+            </header>
 
-          <!-- The country list is in the main of the article -->
-          <div class="country_list"></div>
-        </article>
+            <!-- The country list is in the main of the article -->
+            <div class="country_list"></div>
+          </article>
+
+          <!-- City List -->
+          <article id="city_list" class="hidden">
+            <!-- Header has title and search-->
+            <header>
+              <h2 id="city_title">City List</h2>
+
+              <!-- City Search -->
+              <input
+                type="search"
+                id="city_search"
+                name="city_search"
+                placeholder="Filter by City"
+              />
+            </header>
+
+            <!-- The city list is in the main of the article -->
+            <div class="city_list"></div>
+          </article>
+        </div>
       </div>
     </body>
   </html>
