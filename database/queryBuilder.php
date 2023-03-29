@@ -248,3 +248,26 @@ function get_cities_from_country($dbh, $iso = '%')
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $results;
 }
+
+function get_country_information($dbh, $iso)
+{
+    $sql = <<<STMT
+    SELECT CountryName,
+        Area,
+        Population,
+        Capital,
+        CurrencyName,
+        TopLevelDomain,
+        CountryDescription,
+        Languages,
+        Neighbours
+    FROM countries
+    WHERE ISO = :iso
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':iso', $iso);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
