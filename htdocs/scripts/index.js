@@ -17,8 +17,6 @@ async function getCountryList() {
   // Parse the response as JSON.
   let countryList = await response.json();
 
-  console.log(countryList);
-
   // Save the country list to local storage.
   // TODO UNCOMMENT THIS LINE
   // localStorage.setItem("countryList", JSON.stringify(countryList));
@@ -102,6 +100,79 @@ async function handleCountryClick(event) {
     displayCountryInfo(event);
     displayCities(event);
   }
+
+  // Handle the click event on the li element (City Name).
+  if (event.target.nodeName === "LI") {
+    // Display city info.
+    displayCityInfo(event);
+  }
+}
+
+async function displayCityInfo(event) {
+  // Get the city name from the li element.
+  let cityName = event.target.textContent;
+
+  // Get the country ISO from the summary element.
+  let countryISO = event.target.parentElement.parentElement
+    .querySelector("summary")
+    .getAttribute("data-iso");
+
+  // Get the country name from the summary element.
+  let countryName = event.target.parentElement.parentElement;
+
+  // Get the city info from the API.
+  let cityInfo = await getCityList(countryISO);
+
+  // Select where the data will be displayed.
+  let cityInfoArticle = document.querySelector("#country_info");
+
+  // Clear the city info
+  cityInfoArticle.replaceChildren();
+
+  // Create the content that will go in the header of the article.
+  let header = document.createElement("header");
+  let img = document.createElement("img");
+
+  // TODO - Add the image (placeholder for now)
+  img.src =
+    "https://res.cloudinary.com/dqg3qyjio/image/upload/v1674841639/3512-2023-01-project-images/48847889748.jpg";
+
+  header.append(img);
+
+  // Create the content that will go in the main of the article.
+  let hgroup = document.createElement("hgroup");
+  let h2 = document.createElement("h2");
+  let h3 = document.createElement("h3");
+
+  // Set the content of the main.
+  h2.textContent = cityName;
+  h3.textContent = countryName;
+
+  // Append the content to the article.
+  hgroup.append(h2, h3);
+
+  // Create the content that will go in the footer of the article.
+  let footer = document.createElement("footer");
+  let pouplation = document.createElement("p");
+  let elevation = document.createElement("p");
+  let timezone = document.createElement("p");
+
+  // Set the content of the footer.
+  pouplation.textContent = `Population: ${cityInfo.cities[0].Population}`;
+  elevation.textContent = `Elevation: ${cityInfo.cities[0].Elevation}`;
+  timezone.textContent = `Timezone: ${cityInfo.cities[0].TimeZone}`;
+
+  // Append the content to the article.
+  footer.append(pouplation, elevation, timezone);
+
+  // Append the content to the article.
+  cityInfoArticle.append(header, hgroup, footer);
+
+  // Get the height of the article.
+  let height = header.offsetHeight + hgroup.offsetHeight + footer.offsetHeight;
+
+  // Set the height of the article.
+  cityInfoArticle.style.height = `${height}px`;
 }
 
 async function displayCountryInfo(event) {
@@ -237,8 +308,6 @@ function hideCountriesWithoutImages() {
 
   // Hide the countries without images.
   let countryList = document.querySelector("#country_list");
-
-  console.log(countryList.children);
 
   for (let country of countryList.children) {
     if (country.getAttribute("data-hasImage") === "0") {
