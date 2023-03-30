@@ -273,3 +273,18 @@ function get_country_information($dbh, $iso)
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $results;
 }
+
+function get_languages($dbh)
+{
+    $sql = <<<STMT
+    SELECT  name,
+            iso
+    FROM languages
+    ORDER BY name
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}

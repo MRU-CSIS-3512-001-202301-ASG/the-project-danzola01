@@ -22,6 +22,10 @@ function Endpoint() {
     if (context.infoISO) {
       return this.base + "countryInformation.php?countryISO=" + context.infoISO;
     }
+
+    if (context.languages) {
+      return this.base + "languages.php";
+    }
   };
 }
 

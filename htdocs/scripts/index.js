@@ -17,8 +17,6 @@ async function getCountryList() {
   // Parse the response as JSON.
   let countryList = await response.json();
 
-  console.log(countryList);
-
   // Save the country list to local storage.
   // TODO UNCOMMENT THIS LINE
   // localStorage.setItem("countryList", JSON.stringify(countryList));
@@ -50,6 +48,23 @@ async function getCountryInfo(iso) {
   let countryInfo = await response.json();
 
   return countryInfo;
+}
+
+async function getLanguages() {
+  // Create the endpoint
+  let languagesEndpoint = endpoint.for({ languages: true });
+
+  // Fetch the data from the API.
+  let response = await fetch(languagesEndpoint);
+
+  // Parse the response as JSON.
+  let languages = await response.json();
+
+  // Save the language list to local storage.
+  // TODO UNCOMMENT THIS LINE
+  // localStorage.setItem("languages", JSON.stringify(languages));
+
+  return languages;
 }
 
 function displayCountries(countryList) {
@@ -154,6 +169,7 @@ async function displayCountryInfo(event) {
   // Format the data.
   countryInfo.Area = parseInt(countryInfo.Area).toLocaleString();
   countryInfo.Population = parseInt(countryInfo.Population).toLocaleString();
+  countryInfo.Languages = await parseLanguages(countryInfo.Languages);
 
   // Set the content of the footer.
   languages.textContent = `Languages: ${countryInfo.Languages}`;
@@ -184,6 +200,32 @@ async function displayCountryInfo(event) {
 
   // Scroll to the article.
   countryInfoArticle.scrollIntoView();
+}
+
+async function parseLanguages(languages) {
+  // Convert the languages string to an array.
+  let languagesAsArray = languages.split(",");
+
+  // Loop through the array and remove text after the dash.
+  languagesAsArray = languagesAsArray.map(function (str) {
+    return str.split("-")[0];
+  });
+
+  // Get the language name from the API.
+  let languageList = await getLanguages();
+
+  // Loop through the language list and replace the code with the language name.
+  for (let language of languagesAsArray) {
+    let lang = languageList.languages.find((lang) => lang.iso === language);
+    if (lang) {
+      languagesAsArray[languagesAsArray.indexOf(language)] = lang.name;
+    }
+  }
+
+  // Convert the array to a string.
+  languages = languagesAsArray.join(", ");
+
+  return languages;
 }
 
 async function displayCities(event) {
@@ -237,8 +279,6 @@ function hideCountriesWithoutImages() {
 
   // Hide the countries without images.
   let countryList = document.querySelector("#country_list");
-
-  console.log(countryList.children);
 
   for (let country of countryList.children) {
     if (country.getAttribute("data-hasImage") === "0") {
