@@ -238,7 +238,10 @@ function get_country_list($dbh)
 function get_cities_from_country($dbh, $iso = '%')
 {
     $sql = <<<STMT
-    SELECT DISTINCT cities.AsciiName AS CityName
+    SELECT DISTINCT cities.AsciiName AS CityName,
+        Population,
+        Elevation,
+        TimeZone
     FROM cities
     WHERE cities.CountryCodeISO = :iso
     ORDER BY cities.AsciiName
