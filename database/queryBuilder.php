@@ -222,9 +222,11 @@ function get_country_list($dbh)
     $sql = <<<STMT
     SELECT DISTINCT CountryName,
         ISO,
-        CASE WHEN imagedetails.Path IS NOT NULL THEN true ELSE false END AS HasPath
+        CASE WHEN imagedetails.Path IS NOT NULL THEN true ELSE false END AS HasPath,
+        CASE WHEN imagedetails.Path IS NOT NULL THEN imagedetails.Path ELSE null END AS Path
     FROM countries
     LEFT JOIN imagedetails ON countries.ISO = imagedetails.CountryCodeISO
+    GROUP BY CountryName
     ORDER BY CountryName
     STMT;
 
@@ -239,11 +241,14 @@ function get_cities_from_country($dbh, $iso = '%')
 {
     $sql = <<<STMT
     SELECT DISTINCT cities.AsciiName AS CityName,
-        Population,
-        Elevation,
-        TimeZone
+        cities.Population,
+        cities.Elevation,
+        cities.TimeZone,
+        imagedetails.Path
     FROM cities
+    LEFT JOIN imagedetails ON cities.CityCode = imagedetails.CityCode
     WHERE cities.CountryCodeISO = :iso
+    GROUP BY CityName
     ORDER BY cities.AsciiName
     STMT;
 
