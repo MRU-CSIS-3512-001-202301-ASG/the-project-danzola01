@@ -63,10 +63,6 @@ async function getLanguages() {
   // Parse the response as JSON.
   let languages = await response.json();
 
-  // Save the language list to local storage.
-  // TODO UNCOMMENT THIS LINE
-  // localStorage.setItem("languages", JSON.stringify(languages));
-
   return languages;
 }
 
@@ -184,6 +180,8 @@ async function displayCityInfo(event) {
     header.append(noImg);
   } else {
     img.src = cloudinaryBase + imgPath;
+    img.alt = "Image from " + cityName;
+    img.classList.add("change_on_hover");
     header.append(img);
   }
 
@@ -242,6 +240,7 @@ async function displayCountryInfo(event) {
     let imageID = event.target.parentElement.dataset.image;
     img.src = cloudinaryBase + imageID;
     img.alt = "Image from " + countryInfo.CountryName;
+    img.classList.add("change_on_hover");
     header.append(img);
   } else {
     noImg.textContent = "No image found.";
@@ -359,14 +358,30 @@ async function parseLanguages(languages) {
     return str.split("-")[0];
   });
 
-  // Get the language name from the API.
-  let languageList = await getLanguages();
+  let languageList;
+
+  // Check if the languageList is in local storage.
+  if (!localStorage.getItem("languages")) {
+    // Get the language list from the API.
+    languageList = await getLanguages();
+
+    // Save the language list to local storage.
+    localStorage.setItem("languages", JSON.stringify(languageList));
+  } else {
+    // Get the language list from local storage.
+    languageList = JSON.parse(localStorage.getItem("languages"));
+  }
 
   // Loop through the language list and replace the code with the language name.
   for (let language of languagesAsArray) {
     let lang = languageList.languages.find((lang) => lang.iso === language);
     if (lang) {
       languagesAsArray[languagesAsArray.indexOf(language)] = lang.name;
+    } else {
+      let index = languagesAsArray.indexOf(language);
+      if (index !== -1) {
+        languagesAsArray.splice(index, 1);
+      }
     }
   }
 
