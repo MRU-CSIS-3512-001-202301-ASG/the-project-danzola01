@@ -71,3 +71,9 @@
 - Definitely need to work on my JS skills, I feel like I need to think about things a different way becuasse my code feels very bulky
 - Country list is being displayed, user can search by country
 - If a country is clicked on, the city list is displayed
+
+## Week of Mar 27th
+
+- Final week is upon us
+- Mostly done now, all (hopefully 🤞) requirements for JS up to Single pic view are done.
+- Formatting the languages and neighbours was a pain but got it working.
