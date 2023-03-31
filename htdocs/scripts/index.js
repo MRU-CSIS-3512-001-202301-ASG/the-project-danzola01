@@ -4,6 +4,10 @@ import { Endpoint } from "./endpoint.js";
 // Initialize the endpoint
 const endpoint = new Endpoint();
 
+// Base url for Cloudinary
+const cloudinaryBase =
+  "https://res.cloudinary.com/dqg3qyjio/image/upload/v1674841639/3512-2023-01-project-images/";
+
 // Select the div where the data will be displayed.
 let div = document.querySelector("#country_list");
 
@@ -18,8 +22,7 @@ async function getCountryList() {
   let countryList = await response.json();
 
   // Save the country list to local storage.
-  // TODO UNCOMMENT THIS LINE
-  // localStorage.setItem("countryList", JSON.stringify(countryList));
+  localStorage.setItem("countryList", JSON.stringify(countryList));
 
   return countryList;
 }
@@ -81,6 +84,7 @@ function displayCountries(countryList) {
     summary.textContent = country.CountryName;
     summary.setAttribute("data-iso", country.ISO);
     details.setAttribute("data-hasImage", country.HasPath);
+    details.setAttribute("data-image", country.Path);
 
     // Append the accordion to the div.
     details.append(summary);
@@ -120,6 +124,9 @@ async function handleCountryClick(event) {
 
   // Handle the click event on the li element (City Name).
   if (event.target.nodeName === "LI") {
+    if (event.target.textContent === "No cities found.") {
+      return;
+    }
     // Display city info.
     displayCityInfo(event);
   }
@@ -135,7 +142,10 @@ async function displayCityInfo(event) {
     .getAttribute("data-iso");
 
   // Get the country name from the summary element.
-  let countryName = event.target.parentElement.parentElement;
+  let countryName =
+    event.target.parentElement.parentElement.querySelector(
+      "summary"
+    ).textContent;
 
   // Get the city info from the API.
   let cityInfo = await getCityList(countryISO);
@@ -146,15 +156,36 @@ async function displayCityInfo(event) {
   // Clear the city info
   cityInfoArticle.replaceChildren();
 
+  // Get necessary data from the city info.
+  let populationText = "";
+  let elevationText = "";
+  let timezoneText = "";
+  let imgPath = "";
+
+  // Check the city info to see get the population, elevation, and timezone.
+  for (let city of cityInfo.cities) {
+    if (city.CityName === cityName) {
+      populationText = city.Population.toLocaleString();
+      elevationText = city.Elevation.toLocaleString();
+      timezoneText = city.TimeZone;
+      imgPath = city.Path;
+    }
+  }
+
   // Create the content that will go in the header of the article.
   let header = document.createElement("header");
   let img = document.createElement("img");
 
-  // TODO - Add the image (placeholder for now)
-  img.src =
-    "https://res.cloudinary.com/dqg3qyjio/image/upload/v1674841639/3512-2023-01-project-images/48847889748.jpg";
-
-  header.append(img);
+  // Check if the imgPath is null
+  if (imgPath === null) {
+    let noImg = document.createElement("h2");
+    noImg.textContent = "No image found.";
+    noImg.classList.add("no-image");
+    header.append(noImg);
+  } else {
+    img.src = cloudinaryBase + imgPath;
+    header.append(img);
+  }
 
   // Create the content that will go in the main of the article.
   let hgroup = document.createElement("hgroup");
@@ -175,21 +206,15 @@ async function displayCityInfo(event) {
   let timezone = document.createElement("p");
 
   // Set the content of the footer.
-  pouplation.textContent = `Population: ${cityInfo.cities[0].Population}`;
-  elevation.textContent = `Elevation: ${cityInfo.cities[0].Elevation}`;
-  timezone.textContent = `Timezone: ${cityInfo.cities[0].TimeZone}`;
+  pouplation.textContent = `Population: ${populationText} people`;
+  elevation.textContent = `Elevation: ${elevationText} meters`;
+  timezone.textContent = `Timezone: ${timezoneText}`;
 
   // Append the content to the article.
   footer.append(pouplation, elevation, timezone);
 
   // Append the content to the article.
   cityInfoArticle.append(header, hgroup, footer);
-
-  // Get the height of the article.
-  let height = header.offsetHeight + hgroup.offsetHeight + footer.offsetHeight;
-
-  // Set the height of the article.
-  cityInfoArticle.style.height = `${height}px`;
 }
 
 async function displayCountryInfo(event) {
@@ -209,12 +234,21 @@ async function displayCountryInfo(event) {
   // Create the content that will go in the header of the article.
   let header = document.createElement("header");
   let img = document.createElement("img");
+  let noImg = document.createElement("h2");
 
-  // TODO - Add the image (placeholder for now)
-  img.src =
-    "https://res.cloudinary.com/dqg3qyjio/image/upload/v1674841639/3512-2023-01-project-images/48847889748.jpg";
-
-  header.append(img);
+  // Check if the country has an image.
+  if (event.target.parentElement.dataset.hasimage === "1") {
+    console.log("image found");
+    let imageID = event.target.parentElement.dataset.image;
+    img.src = cloudinaryBase + imageID;
+    img.alt = "Image from " + countryInfo.CountryName;
+    header.append(img);
+  } else {
+    noImg.textContent = "No image found.";
+    noImg.classList.add("no-image");
+    header.append(noImg);
+    console.log("no image found");
+  }
 
   // Create the content that will go in the main of the article.
   let hgroup = document.createElement("hgroup");
@@ -243,6 +277,7 @@ async function displayCountryInfo(event) {
   countryInfo.Area = parseInt(countryInfo.Area).toLocaleString();
   countryInfo.Population = parseInt(countryInfo.Population).toLocaleString();
   countryInfo.Languages = await parseLanguages(countryInfo.Languages);
+  countryInfo.Neighbours = parseNeighbours(countryInfo.Neighbours);
 
   // Set the content of the footer.
   languages.textContent = `Languages: ${countryInfo.Languages}`;
@@ -273,6 +308,46 @@ async function displayCountryInfo(event) {
 
   // Scroll to the article.
   countryInfoArticle.scrollIntoView();
+}
+
+function parseNeighbours(neighbours) {
+  let neighboursAsArray = [];
+
+  // check if the neighbours are null
+  if (neighbours === null) {
+    return "No neighbours.";
+  }
+
+  // Check if there is more than one neighbour.
+  if (neighbours.includes(",")) {
+    // Convert the neighbours string to an array.
+    neighboursAsArray = neighbours.split(",");
+  }
+
+  // Check if there is only one neighbour.
+  if (!neighbours.includes(",")) {
+    // Convert the neighbours string to an array.
+    neighboursAsArray.push(neighbours);
+  }
+
+  // Get the country names from local storage.
+  let countryList = JSON.parse(localStorage.getItem("countryList"));
+
+  // Loop through the neighbours array and replace the code with the country name.
+  for (let neighbour of neighboursAsArray) {
+    let country = countryList.countries.find(
+      (country) => country.ISO === neighbour
+    );
+    if (country) {
+      neighboursAsArray[neighboursAsArray.indexOf(neighbour)] =
+        country.CountryName;
+    }
+  }
+
+  // Convert the array to a string.
+  neighbours = neighboursAsArray.join(", ");
+
+  return neighbours;
 }
 
 async function parseLanguages(languages) {
