@@ -1,5 +1,6 @@
 // Imports
 import { Endpoint } from "./endpoint.js";
+import { toggleModal } from "./modal.js";
 
 // Initialize the endpoint
 const endpoint = new Endpoint();
@@ -676,8 +677,68 @@ async function handleImageClick(event) {
   // Get the image info from the API.
   let imageInfo = await getImageInfo(imageId);
 
+  console.log(imageInfo.details);
+
+  // Set the modal info to the image info.
+  let modal = document.querySelector("#image-info-modal");
+
+  // Clear the modal content.
+  modal.replaceChildren();
+
+  // Create the article and close button.
+  let article = document.createElement("article");
+  let close = document.createElement("a");
+
+  // Close "button" (actually a link)
+  close.href = "#close";
+  close.ariaLabel = "Close";
+  close.className = "close";
+  close.dataset.target = "image-info-modal";
+  close.addEventListener("click", toggleModal);
+
+  // Image
+  let header = document.createElement("header");
+  let image = document.createElement("img");
+
+  // Set the image details
+  image.src = event.target.src;
+  image.alt = event.target.alt;
+
+  // Append the image to the header
+  header.append(close, image);
+
+  // Title and city/country
+  let hgroup = document.createElement("hgroup");
+  let title = document.createElement("h2");
+  let location = document.createElement("h3");
+
+  // Set the text content of the elements.
+  title.textContent = imageInfo.details[0].Title;
+  location.textContent = `${imageInfo.details[0].AsciiName}, ${imageInfo.details[0].CountryName}`;
+
+  // Append to hgroup
+  hgroup.append(title, location);
+
+  // Image info
+  let description = document.createElement("p");
+  let latitude = document.createElement("p");
+  let longitude = document.createElement("p");
+  let userName = document.createElement("p");
+
+  // Set the text content of the elements.
+  description.textContent = imageInfo.details[0].Description;
+  latitude.textContent = `Latitude: ${imageInfo.details[0].Latitude}`;
+  longitude.textContent = `Longitude: ${imageInfo.details[0].Longitude}`;
+  userName.textContent = `User: ${imageInfo.details[0].UserName}`;
+
+  // Append the elements to the article.
+  article.append(header, hgroup, description, latitude, longitude, userName);
+
+  // Append the article to the modal.
+  modal.append(article);
+
   // Display the modal with the image and details.
-  console.log(imageInfo);
+  toggleModal(event);
 }
 
 async function getImageInfo(imageId) {
