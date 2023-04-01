@@ -30,6 +30,10 @@ function Endpoint() {
     if (context.imageId) {
       return this.base + "ratings.php?imageId=" + context.imageId;
     }
+
+    if (context.infoForId) {
+      return this.base + "photoInformation.php?imageId=" + context.infoForId;
+    }
   };
 }
 

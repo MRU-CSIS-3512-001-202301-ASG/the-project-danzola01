@@ -664,6 +664,35 @@ function hideCountriesWithoutImages() {
   }
 }
 
+async function handleImageClick(event) {
+  // Check if the user clicked on an image.
+  if (event.target.nodeName !== "IMG") {
+    return;
+  }
+
+  // Get the image ID
+  let imageId = event.target.dataset.imageId;
+
+  // Get the image info from the API.
+  let imageInfo = await getImageInfo(imageId);
+
+  // Display the modal with the image and details.
+  console.log(imageInfo);
+}
+
+async function getImageInfo(imageId) {
+  // Create the endpoint
+  let imageEndpoint = endpoint.for({ infoForId: imageId });
+
+  // Fetch the data from the API.
+  let response = await fetch(imageEndpoint);
+
+  // Parse the response as JSON.
+  let imageInfo = await response.json();
+
+  return imageInfo;
+}
+
 // Check if the country list is in local storage.
 if (localStorage.getItem("countryList")) {
   // If it is, display the countries.
@@ -685,3 +714,6 @@ currentCountryList.addEventListener("click", handleCountryClick);
 
 let imagesOnly = document.querySelector("#images_only");
 imagesOnly.addEventListener("change", hideCountriesWithoutImages);
+
+let infoArticle = document.querySelector("#country_info");
+infoArticle.addEventListener("click", handleImageClick);
