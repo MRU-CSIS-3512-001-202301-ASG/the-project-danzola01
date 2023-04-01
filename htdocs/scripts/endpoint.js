@@ -26,6 +26,10 @@ function Endpoint() {
     if (context.languages) {
       return this.base + "languages.php";
     }
+
+    if (context.imageId) {
+      return this.base + "ratings.php?imageId=" + context.imageId;
+    }
   };
 }
 

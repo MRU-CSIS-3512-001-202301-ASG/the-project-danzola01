@@ -77,3 +77,4 @@
 - Final week is upon us
 - Mostly done now, all (hopefully 🤞) requirements for JS up to Single pic view are done.
 - Formatting the languages and neighbours was a pain but got it working.
+- This was a rough one, had to change my code so that it would displayed all of the images as opposed to one for a country.Had to change many methods and I'm still working on the formatting but getting there
