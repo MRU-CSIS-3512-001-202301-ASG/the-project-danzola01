@@ -272,8 +272,6 @@ async function displayCountryInfo(event) {
   // Array to hold the image ids.
   let imageIds = [];
 
-  console.log(countryList);
-
   // Loop through the country list to get the the image ids.
   for (let country of countryList.countries) {
     if (country.ISO === iso) {
@@ -318,75 +316,13 @@ async function displayCountryInfo(event) {
     });
 
     for (let image of images) {
+      // Wait for the image to be created.
       image = await image;
 
-      console.log(image);
+      // Get the rating table for the image.
+      let table = makeRatingTable(image);
 
-      // Create the table for the ratings.
-      let table = document.createElement("table");
-      let tableHead = document.createElement("thead");
-      let tableBody = document.createElement("tbody");
-      let tableRow = document.createElement("tr");
-      let tableHead0 = document.createElement("th");
-      let tableHead1 = document.createElement("th");
-      let tableHead2 = document.createElement("th");
-      let tableHead3 = document.createElement("th");
-      let tableHead4 = document.createElement("th");
-      let tableHead5 = document.createElement("th");
-      let tableData0 = document.createElement("td");
-      let tableData1 = document.createElement("td");
-      let tableData2 = document.createElement("td");
-      let tableData3 = document.createElement("td");
-      let tableData4 = document.createElement("td");
-      let tableData5 = document.createElement("td");
-
-      tableHead0.classList.add("th_center");
-      tableHead1.classList.add("th_center");
-      tableHead2.classList.add("th_center");
-      tableHead3.classList.add("th_center");
-      tableHead4.classList.add("th_center");
-      tableHead5.classList.add("th_center");
-      tableData0.classList.add("th_center");
-      tableData1.classList.add("th_center");
-      tableData2.classList.add("th_center");
-      tableData3.classList.add("th_center");
-      tableData4.classList.add("th_center");
-      tableData5.classList.add("th_center");
-
-      // Set the content of the table.
-      tableHead0.textContent = "Rating";
-      tableHead1.textContent = "1⭐";
-      tableHead2.textContent = "2⭐";
-      tableHead3.textContent = "3⭐";
-      tableHead4.textContent = "4⭐";
-      tableHead5.textContent = "5⭐";
-      tableData0.textContent = "Rated as";
-      tableData1.textContent = image.getAttribute("data-rating-1-count");
-      tableData2.textContent = image.getAttribute("data-rating-2-count");
-      tableData3.textContent = image.getAttribute("data-rating-3-count");
-      tableData4.textContent = image.getAttribute("data-rating-4-count");
-      tableData5.textContent = image.getAttribute("data-rating-5-count");
-
-      // Append the content to the table.
-      tableHead.append(
-        tableHead0,
-        tableHead1,
-        tableHead2,
-        tableHead3,
-        tableHead4,
-        tableHead5
-      );
-      tableRow.append(
-        tableData0,
-        tableData1,
-        tableData2,
-        tableData3,
-        tableData4,
-        tableData5
-      );
-      tableBody.append(tableRow);
-      table.append(tableHead, tableBody);
-
+      // Append the image and the table to the header of the article.
       header.append(image, table);
     }
   }
@@ -449,6 +385,76 @@ async function displayCountryInfo(event) {
 
   // Scroll to the article.
   countryInfoArticle.scrollIntoView();
+}
+
+function makeRatingTable(image) {
+  // Create the table for the ratings.
+  let table = document.createElement("table");
+  let tableHead = document.createElement("thead");
+  let tableBody = document.createElement("tbody");
+  let tableRow = document.createElement("tr");
+  // let tableHead0 = document.createElement("th");
+  let tableHead1 = document.createElement("th");
+  let tableHead2 = document.createElement("th");
+  let tableHead3 = document.createElement("th");
+  let tableHead4 = document.createElement("th");
+  let tableHead5 = document.createElement("th");
+  // let tableData0 = document.createElement("td");
+  let tableData1 = document.createElement("td");
+  let tableData2 = document.createElement("td");
+  let tableData3 = document.createElement("td");
+  let tableData4 = document.createElement("td");
+  let tableData5 = document.createElement("td");
+
+  // Table
+  // tableHead0.classList.add("th_center");
+  tableHead1.classList.add("th_center");
+  tableHead2.classList.add("th_center");
+  tableHead3.classList.add("th_center");
+  tableHead4.classList.add("th_center");
+  tableHead5.classList.add("th_center");
+  // tableData0.classList.add("th_center");
+  tableData1.classList.add("th_center");
+  tableData2.classList.add("th_center");
+  tableData3.classList.add("th_center");
+  tableData4.classList.add("th_center");
+  tableData5.classList.add("th_center");
+
+  // Set the content of the table.
+  // tableHead0.textContent = "Rating";
+  tableHead1.textContent = "1⭐";
+  tableHead2.textContent = "2⭐";
+  tableHead3.textContent = "3⭐";
+  tableHead4.textContent = "4⭐";
+  tableHead5.textContent = "5⭐";
+  // tableData0.textContent = "Rated as";
+  tableData1.textContent = image.getAttribute("data-rating-1-count");
+  tableData2.textContent = image.getAttribute("data-rating-2-count");
+  tableData3.textContent = image.getAttribute("data-rating-3-count");
+  tableData4.textContent = image.getAttribute("data-rating-4-count");
+  tableData5.textContent = image.getAttribute("data-rating-5-count");
+
+  // Append the content to the table.
+  tableHead.append(
+    // tableHead0,
+    tableHead1,
+    tableHead2,
+    tableHead3,
+    tableHead4,
+    tableHead5
+  );
+  tableRow.append(
+    // tableData0,
+    tableData1,
+    tableData2,
+    tableData3,
+    tableData4,
+    tableData5
+  );
+  tableBody.append(tableRow);
+  table.append(tableHead, tableBody);
+
+  return table;
 }
 
 function parseNeighbours(neighbours) {
@@ -541,6 +547,21 @@ async function displayCities(event) {
   // Get the city list from the API.
   let cityList = await getCityList(iso);
 
+  // Create a new array to hold only unique countries
+  let uniqueCities = [];
+
+  // Loop through the data and add unique countries to the new array
+  for (let city of cityList.cities) {
+    // 👇 Helped by AI
+    // .some returns true if the element is found in the array
+    let isUnique = !uniqueCities.some((c) => c.CityName === city.CityName);
+
+    // If the country is unique, add it to the array.
+    if (isUnique) {
+      uniqueCities.push(city);
+    }
+  }
+
   // Select the accordion where the data will be displayed.
   let accordion = event.target.parentElement;
 
@@ -555,9 +576,16 @@ async function displayCities(event) {
   let cityListElement = document.createElement("ul");
 
   // Loop through the city list and display the cities.
-  for (let city of cityList.cities) {
+  for (let city of uniqueCities) {
     let li = document.createElement("li");
     li.textContent = city.CityName;
+
+    // Check if the city has a Path and ImageID
+    if (city.Path !== null || city.ImageID !== null) {
+      li.setAttribute("data-has-image", true);
+      li.setAttribute("data-path", city.Path);
+    }
+
     cityListElement.append(li);
   }
 

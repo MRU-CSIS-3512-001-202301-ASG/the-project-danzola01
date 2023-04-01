@@ -249,7 +249,6 @@ function get_cities_from_country($dbh, $iso = '%')
     FROM cities
     LEFT JOIN imagedetails ON cities.CityCode = imagedetails.CityCode
     WHERE cities.CountryCodeISO = :iso
-    GROUP BY CityName
     ORDER BY cities.AsciiName
     STMT;
 
