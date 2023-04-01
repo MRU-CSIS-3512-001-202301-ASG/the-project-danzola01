@@ -250,7 +250,7 @@ async function displayCityInfo(event) {
   cityInfoArticle.append(header, hgroup, footer);
 }
 
-// Note for JP: I am not prouf of this but it works (mostly).
+// Note for JP: I am not prouf of this but it works.
 // I know this function should be boken up into a million more
 async function displayCountryInfo(event) {
   // Get the ISO code from the summary.
@@ -389,11 +389,6 @@ async function displayCountryInfo(event) {
 
       header.append(image, table);
     }
-
-    // Append the images to the header.
-    await Promise.all(images).then((images) => {
-      images.forEach((image) => header.append(image));
-    });
   }
 
   // Create the content that will go in the main of the article.
