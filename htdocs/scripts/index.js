@@ -181,6 +181,16 @@ async function displayCityInfo(event) {
   // Get the city info from the API.
   let cityInfo = await getCityList(countryISO);
 
+  // Array to hold the image ids.
+  let imageIds = [];
+
+  // Loop through the city list to get the the image ids.
+  for (let city of cityInfo.cities) {
+    if (city.CityName === cityName) {
+      imageIds.push(city.ImageID);
+    }
+  }
+
   // Select where the data will be displayed.
   let cityInfoArticle = document.querySelector("#country_info");
 
@@ -199,25 +209,55 @@ async function displayCityInfo(event) {
       populationText = city.Population.toLocaleString();
       elevationText = city.Elevation.toLocaleString();
       timezoneText = city.TimeZone;
-      imgPath = city.Path;
     }
   }
 
   // Create the content that will go in the header of the article.
   let header = document.createElement("header");
-  let img = document.createElement("img");
+  let noImg = document.createElement("h2");
 
-  // Check if the imgPath is null
-  if (imgPath === null) {
-    let noImg = document.createElement("h2");
-    noImg.textContent = "No image found.";
+  // Check if the image id is null.
+  if (imageIds[0] === null) {
+    noImg.textContent = `Sorry! We have no images for ${cityName}.`;
     noImg.classList.add("no-image");
     header.append(noImg);
   } else {
-    img.src = cloudinaryBase + imgPath;
-    img.alt = "Image from " + cityName;
-    img.classList.add("change_on_hover");
-    header.append(img);
+    // get the path for each image id from the city info.
+    let imgPaths = imageIds.map((imageId) => {
+      let matchingCity = cityInfo.cities.find(
+        (city) => city.ImageID === imageId
+      );
+      return matchingCity ? matchingCity.Path : null;
+    });
+
+    // Create the images for the header.
+    let images = imgPaths.map(async (imgPath, index) => {
+      let img = document.createElement("img");
+      img.src = cloudinaryBase + imgPath;
+      img.alt = "Image from " + cityName;
+      img.classList.add("change_on_hover");
+
+      // Get the rating for the corresponding image id from the API.
+      let rating = await getRating(imageIds[index]);
+      img.setAttribute("data-rating-1-count", rating.ratings[0].rating_1_count);
+      img.setAttribute("data-rating-2-count", rating.ratings[0].rating_2_count);
+      img.setAttribute("data-rating-3-count", rating.ratings[0].rating_3_count);
+      img.setAttribute("data-rating-4-count", rating.ratings[0].rating_4_count);
+      img.setAttribute("data-rating-5-count", rating.ratings[0].rating_5_count);
+      img.setAttribute("data-image-id", imageIds[index]);
+      return img;
+    });
+
+    for (let image of images) {
+      // Wait for the image to be created.
+      image = await image;
+
+      // Get the rating table for the image.
+      let table = makeRatingTable(image);
+
+      // Append the image and the table to the header of the article.
+      header.append(image, table);
+    }
   }
 
   // Create the content that will go in the main of the article.
