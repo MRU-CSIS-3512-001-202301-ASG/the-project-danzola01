@@ -111,3 +111,7 @@ hr {
 .change_on_hover {
   cursor: pointer;
 }
+
+.close {
+  cursor: pointer;
+}
