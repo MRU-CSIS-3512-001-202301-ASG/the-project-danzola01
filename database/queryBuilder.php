@@ -317,3 +317,27 @@ function get_rating_for_image_id($dbh, $image_id)
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $results;
 }
+
+function get_photo_info_from_image_id($dbh, $image_id)
+{
+    $sql = <<<STMT
+    SELECT imagedetails.Title,
+        imagedetails.Latitude,
+        imagedetails.Longitude,
+        userslogin.UserName,
+        cities.AsciiName,
+        countries.CountryName,
+        imagedetails.Description
+    FROM imagedetails
+    LEFT JOIN cities ON imagedetails.CityCode = cities.CityCode
+    LEFT JOIN countries ON imagedetails.CountryCodeISO = countries.ISO
+    LEFT JOIN userslogin ON imagedetails.UserID = userslogin.UserID
+    WHERE ImageID = :image_id
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':image_id', $image_id);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
