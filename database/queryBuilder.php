@@ -219,14 +219,14 @@ function get_drops_in_city($dbh, $city_id, $user_id = TARGET_USER)
  */
 function get_country_list($dbh)
 {
+    // This query may or may not have been heavily aided by AI
     $sql = <<<STMT
-    SELECT DISTINCT CountryName,
+    SELECT CountryName,
         ISO,
-        CASE WHEN imagedetails.Path IS NOT NULL THEN true ELSE false END AS HasPath,
-        CASE WHEN imagedetails.Path IS NOT NULL THEN imagedetails.Path ELSE null END AS Path
+        imagedetails.Path AS Path,
+        imagedetails.ImageID AS ImageID
     FROM countries
     LEFT JOIN imagedetails ON countries.ISO = imagedetails.CountryCodeISO
-    GROUP BY CountryName
     ORDER BY CountryName
     STMT;
 
@@ -244,7 +244,8 @@ function get_cities_from_country($dbh, $iso = '%')
         cities.Population,
         cities.Elevation,
         cities.TimeZone,
-        imagedetails.Path
+        imagedetails.Path,
+        imagedetails.ImageID
     FROM cities
     LEFT JOIN imagedetails ON cities.CityCode = imagedetails.CityCode
     WHERE cities.CountryCodeISO = :iso
@@ -292,6 +293,27 @@ function get_languages($dbh)
     STMT;
 
     $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
+
+function get_rating_for_image_id($dbh, $image_id)
+{
+    $sql = <<<STMT
+    SELECT imageid,
+       COUNT(CASE WHEN rating = 1 THEN 1 ELSE NULL END) AS rating_1_count,
+       COUNT(CASE WHEN rating = 2 THEN 1 ELSE NULL END) AS rating_2_count,
+       COUNT(CASE WHEN rating = 3 THEN 1 ELSE NULL END) AS rating_3_count,
+       COUNT(CASE WHEN rating = 4 THEN 1 ELSE NULL END) AS rating_4_count,
+       COUNT(CASE WHEN rating = 5 THEN 1 ELSE NULL END) AS rating_5_count
+    FROM imagerating
+    WHERE ImageID = :image_id
+    GROUP BY imageid
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':image_id', $image_id);
     $stmt->execute();
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $results;
