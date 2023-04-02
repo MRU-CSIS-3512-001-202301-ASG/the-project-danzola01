@@ -341,3 +341,22 @@ function get_photo_info_from_image_id($dbh, $image_id)
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return $results;
 }
+
+function get_rating_info_from_image_id($dbh, $image_id)
+{
+    $sql = <<<STMT
+    SELECT imagerating.Rating,
+        users.FirstName,
+        users.LastName
+    FROM imagerating
+    LEFT JOIN users ON imagerating.UserID = users.UserID
+    WHERE imagerating.ImageID = :image_id
+    ORDER BY imagerating.Rating DESC
+    STMT;
+
+    $stmt = $dbh->prepare($sql);
+    $stmt->bindParam(':image_id', $image_id);
+    $stmt->execute();
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return $results;
+}
