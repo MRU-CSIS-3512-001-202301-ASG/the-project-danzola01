@@ -23,7 +23,6 @@ async function getCountryList() {
   let countryList = await response.json();
 
   // Save the country list to local storage.
-  // TODO: UNCOMMENT THIS LINE BEFORE SUBMITTING
   localStorage.setItem("countryList", JSON.stringify(countryList));
 
   return countryList;
@@ -555,7 +554,6 @@ async function parseLanguages(languages) {
     languageList = await getLanguages();
 
     // Save the language list to local storage.
-    // TODO: UNCOMMENT THIS LINE BEFORE SUBMITTING
     localStorage.setItem("languages", JSON.stringify(languageList));
   } else {
     // Get the language list from local storage.
