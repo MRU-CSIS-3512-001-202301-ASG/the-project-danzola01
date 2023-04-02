@@ -677,8 +677,6 @@ async function handleImageClick(event) {
   // Get the image info from the API.
   let imageInfo = await getImageInfo(imageId);
 
-  console.log(imageInfo.details);
-
   // Set the modal info to the image info.
   let modal = document.querySelector("#image-info-modal");
 
@@ -690,7 +688,6 @@ async function handleImageClick(event) {
   let close = document.createElement("a");
 
   // Close "button" (actually a link)
-  close.href = "#close";
   close.ariaLabel = "Close";
   close.className = "close";
   close.dataset.target = "image-info-modal";
@@ -731,8 +728,34 @@ async function handleImageClick(event) {
   longitude.textContent = `Longitude: ${imageInfo.details[0].Longitude}`;
   userName.textContent = `User: ${imageInfo.details[0].UserName}`;
 
+  // Get the rating info
+  let ratingInfo = await getRatingInfo(imageId);
+
+  // Create the list of ratings
+  let ratings = document.createElement("h3");
+  ratings.textContent = "Ratings";
+
+  let ul = document.createElement("ul");
+
+  for (let rating of ratingInfo.ratingInfo) {
+    let li = document.createElement("li");
+    li.textContent = `${rating.FirstName} ${rating.LastName} rated this place as ${rating.Rating}⭐`;
+    ul.append(li);
+  }
+
+  // Append the ratings to the article
+
   // Append the elements to the article.
-  article.append(header, hgroup, description, latitude, longitude, userName);
+  article.append(
+    header,
+    hgroup,
+    description,
+    latitude,
+    longitude,
+    userName,
+    ratings,
+    ul
+  );
 
   // Append the article to the modal.
   modal.append(article);
@@ -752,6 +775,19 @@ async function getImageInfo(imageId) {
   let imageInfo = await response.json();
 
   return imageInfo;
+}
+
+async function getRatingInfo(imageId) {
+  // Create the endpoint
+  let ratingEndpoint = endpoint.for({ ratingInfo: imageId });
+
+  // Fetch the data from the API.
+  let response = await fetch(ratingEndpoint);
+
+  // Parse the response as JSON.
+  let ratingInfo = await response.json();
+
+  return ratingInfo;
 }
 
 // Check if the country list is in local storage.
