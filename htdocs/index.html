@@ -1,65 +1,61 @@
 <!DOCTYPE html>
-<html lang="en">
-  <!DOCTYPE html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
 
-  <html lang="en" data-theme="dark">
-    <head>
-      <meta charset="UTF-8" />
+    <!-- Pico CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
+    />
 
-      <!-- Pico CSS -->
-      <link
-        rel="stylesheet"
-        href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css"
-      />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css" />
 
-      <!-- Custom CSS -->
-      <link rel="stylesheet" href="css/style.css" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../../images/favicon.ico" />
 
-      <!-- Favicon -->
-      <link rel="icon" type="image/x-icon" href="../../images/favicon.ico" />
+    <!-- Page title -->
+    <title>Travel</title>
 
-      <!-- Page title -->
-      <title>Travel</title>
+    <!-- Script -->
+    <script type="module" src="./scripts/index.js"></script>
+  </head>
 
-      <!-- Script -->
-      <script type="module" src="./scripts/index.js"></script>
-    </head>
+  <body>
+    <div class="container">
+      <div class="grid">
+        <!-- Countries -->
+        <article>
+          <!-- Header has title and search-->
+          <header>
+            <h2>Country List</h2>
 
-    <body>
-      <div class="container">
-        <div class="grid">
-          <!-- Countries -->
-          <article>
-            <!-- Header has title and search-->
-            <header>
-              <h2>Country List</h2>
+            <!-- Country Search -->
+            <input
+              type="search"
+              id="country_search"
+              name="country_search"
+              placeholder="Filter by Country"
+            />
 
-              <!-- Country Search -->
-              <input
-                type="search"
-                id="country_search"
-                name="country_search"
-                placeholder="Filter by Country"
-              />
+            <!-- Checkbox for images only -->
+            <label for="images_only">
+              <input type="checkbox" id="images_only" name="images_only" />
+              Only show countries that have images
+            </label>
+          </header>
 
-              <!-- Checkbox for images only -->
-              <label for="images_only">
-                <input type="checkbox" id="images_only" name="images_only" />
-                Only show countries that have images
-              </label>
-            </header>
+          <!-- The country list is in the main of the article -->
+          <div id="country_list" class="scroll"></div>
+        </article>
 
-            <!-- The country list is in the main of the article -->
-            <div id="country_list" class="scroll"></div>
-          </article>
+        <!-- Country information -->
+        <article id="country_info" class="hidden scroll"></article>
 
-          <!-- Country information -->
-          <article id="country_info" class="hidden scroll"></article>
-
-          <!-- Modal -->
-          <dialog id="image-info-modal"></dialog>
-        </div>
+        <!-- Modal -->
+        <dialog id="image-info-modal"></dialog>
       </div>
-    </body>
-  </html>
+    </div>
+  </body>
 </html>
